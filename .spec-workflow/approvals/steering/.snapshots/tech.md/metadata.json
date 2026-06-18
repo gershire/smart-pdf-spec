@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/steering/tech.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-06-16T15:42:05.455Z",
+      "trigger": "initial",
+      "approvalId": "approval_1781624525441_xo9yr37ry",
+      "approvalTitle": "Technical Architecture Document - Smart PDF Scanner"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2026-06-16T17:34:53.103Z",
+      "trigger": "approved",
+      "approvalId": "approval_1781624525441_xo9yr37ry",
+      "approvalTitle": "Technical Architecture Document - Smart PDF Scanner"
+    }
+  ]
+}

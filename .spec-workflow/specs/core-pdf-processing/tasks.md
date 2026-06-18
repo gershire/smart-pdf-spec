@@ -1,0 +1,450 @@
+# Tasks Document: Core PDF Processing Pipeline
+
+## Phase 1: Foundation & Data Models
+
+- [ ] 1.1. Create project structure and base configuration
+  - Files: `pyproject.toml`, `src/smart_pdf_scanner/__init__.py`, `config/default.yaml`
+  - Set up Poetry project with dependencies (PyMuPDF, pdfplumber, pydantic, etc.)
+  - Create directory structure following structure.md
+  - Add base configuration file with default settings
+  - _Leverage: Poetry for dependency management, YAML for configuration_
+  - _Requirements: Req 10 (Configuration Management)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python DevOps Engineer specializing in project setup and dependency management | Task: Set up the complete project structure following structure.md, configure Poetry with all required dependencies from tech.md, and create base configuration files following requirement 10 | Restrictions: Use exact dependency versions from tech.md, follow Python packaging best practices, ensure cross-platform compatibility | Leverage: Poetry for dependency management, structure.md for directory layout, tech.md for technology choices | Requirements: Req 10 | Success: Project structure matches structure.md exactly, all dependencies install without conflicts, configuration loads successfully | Instructions: Mark this task as in-progress [-] in tasks.md before starting, implement the code, test it works, then use log-implementation tool to record what was implemented with detailed artifacts (files created, dependencies added), and finally mark as complete [x] in tasks.md_
+
+- [ ] 1.2. Implement core data models (BoundingBox, Element base)
+  - Files: `src/smart_pdf_scanner/models/elements.py`, `src/smart_pdf_scanner/models/__init__.py`
+  - Create Pydantic models for BoundingBox, ElementType enum, Element base class
+  - Add bbox utility methods (area, intersects, contains)
+  - _Leverage: Pydantic for validation and serialization_
+  - _Requirements: Req 3 (Layout Analysis), Design: Element Models_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in data modeling and Pydantic | Task: Create core element data models including BoundingBox with geometric operations, ElementType enum, and Element base class following the design document's Element Models section | Restrictions: Use Pydantic BaseModel, implement all methods from design, ensure type safety | Leverage: Pydantic for validation, design.md Element Models section | Requirements: Req 3 | Success: All models validate correctly, bbox operations work accurately, models serialize to/from JSON | Instructions: Mark task as in-progress [-], implement models with full type hints and validation, test bbox operations, log implementation with artifacts (classes created with methods), mark complete [x]_
+
+- [ ] 1.3. Implement element subclasses (TextBlock, Heading, Table, Image)
+  - Files: `src/smart_pdf_scanner/models/elements.py` (continue from 1.2)
+  - Create TextBlock, Heading, Table, Image classes extending Element
+  - Add FontInfo, TableRow, ImageType models
+  - _Leverage: Element base class from task 1.2_
+  - _Requirements: Req 2 (PDF Parsing), Req 6 (Table Processing), Req 7 (Image Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer specializing in object-oriented design and data structures | Task: Implement element subclasses (TextBlock, Heading, Table, Image) extending the Element base class, plus supporting models (FontInfo, TableRow, ImageType) following design document specifications | Restrictions: Must properly inherit from Element, maintain Pydantic validation, follow design model structures exactly | Leverage: Element base class, Pydantic inheritance patterns | Requirements: Req 2, 6, 7 | Success: All element types properly inherit and validate, specific fields are correctly typed, models support all required operations | Instructions: Mark [-], extend Element class for each type, add specific fields per design, test validation, log with artifacts (classes: TextBlock, Heading, Table, Image with their fields), mark [x]_
+
+- [ ] 1.4. Implement Page and Document models
+  - Files: `src/smart_pdf_scanner/models/page.py`, `src/smart_pdf_scanner/models/document.py`
+  - Create Page model with elements list and dimensions
+  - Create Document model with pages, metadata, structure
+  - Add helper methods (add_page, get_page, get_all_elements)
+  - _Leverage: Element models from tasks 1.2-1.3_
+  - _Requirements: Req 1 (Pipeline Orchestration), Design: Document Model, Page Model_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in data modeling and collections | Task: Implement Page and Document models following design specifications, including helper methods for element management and page access per requirement 1 | Restrictions: Use Pydantic, implement all methods from design, ensure efficient element access | Leverage: Element models, Pydantic Field with default_factory | Requirements: Req 1 | Success: Documents can manage pages and elements efficiently, helper methods work correctly, models validate properly | Instructions: Mark [-], create Page and Document classes with all fields and methods from design, test CRUD operations, log with artifacts (classes: Page, Document with methods: add_page, get_page, get_all_elements), mark [x]_
+
+- [ ] 1.5. Implement structure and metadata models
+  - Files: `src/smart_pdf_scanner/models/structure.py`, `src/smart_pdf_scanner/models/metadata.py`
+  - Create DocumentStructure, TableOfContents, TOCEntry, Link models
+  - Create DocumentMetadata model with PDF metadata fields
+  - _Leverage: Heading model from task 1.3_
+  - _Requirements: Req 5 (Structure Recognition), Design: Structure Models, Metadata Model_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in document structure modeling | Task: Implement structure models (DocumentStructure, TableOfContents, TOCEntry, Link) and DocumentMetadata following design specifications for requirement 5 | Restrictions: Use Pydantic, follow design model structures, ensure proper relationships | Leverage: Heading model, Pydantic Optional and List types | Requirements: Req 5 | Success: Structure models properly represent document hierarchy, metadata captures all PDF fields, models validate correctly | Instructions: Mark [-], create all structure and metadata models per design, test with sample data, log with artifacts (classes: DocumentStructure, TableOfContents, TOCEntry, Link, DocumentMetadata), mark [x]_
+
+- [ ] 1.6. Implement configuration models and manager
+  - Files: `src/smart_pdf_scanner/models/config.py`, `src/smart_pdf_scanner/core/config.py`
+  - Create Config, OCRConfig, LayoutConfig, LLMConfig Pydantic models
+  - Implement ConfigManager with load, validate, get_preset methods
+  - Add configuration hierarchy (defaults → file → env → overrides)
+  - _Leverage: Pydantic for validation, PyYAML for parsing, python-dotenv for env vars_
+  - _Requirements: Req 10 (Configuration Management), Design: Configuration Model, Configuration Manager_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in configuration management and validation | Task: Implement configuration models and ConfigManager with hierarchical loading (defaults → file → env → CLI) following requirement 10 and design specifications | Restrictions: Use Pydantic for validation, support YAML files, handle missing configs gracefully | Leverage: Pydantic BaseModel, PyYAML, python-dotenv, pathlib | Requirements: Req 10 | Success: Configuration loads from multiple sources with correct precedence, validation catches errors, presets work correctly | Instructions: Mark [-], create config models and ConfigManager class, implement load/validate/get_preset methods, test hierarchy, log with artifacts (classes: Config, OCRConfig, LayoutConfig, LLMConfig, ConfigManager with methods), mark [x]_
+
+- [ ] 1.7. Implement ProcessingResult model and utilities
+  - Files: `src/smart_pdf_scanner/models/result.py`, `src/smart_pdf_scanner/utils/logging.py`
+  - Create ProcessingResult and ProcessingStatistics models
+  - Set up structured logging with JSON format support
+  - _Leverage: Pydantic, Python logging module_
+  - _Requirements: Req 12 (Error Handling and Logging), Design: Processing Result Model_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in logging and result handling | Task: Implement ProcessingResult and ProcessingStatistics models, plus structured logging configuration following requirement 12 and design specifications | Restrictions: Use Pydantic for models, Python logging for logs, support JSON format | Leverage: Pydantic BaseModel, Python logging module, datetime | Requirements: Req 12 | Success: Results capture all processing outcomes, statistics track key metrics, logging outputs structured JSON | Instructions: Mark [-], create result models and logging config, test with sample data, log with artifacts (classes: ProcessingResult, ProcessingStatistics, functions: logging setup), mark [x]_
+
+## Phase 2: Utility Modules
+
+- [ ] 2.1. Implement bounding box utilities
+  - Files: `src/smart_pdf_scanner/utils/bbox.py`
+  - Create functions for bbox operations: intersection, union, contains, overlap_area
+  - Add spatial analysis helpers for reading order determination
+  - _Leverage: BoundingBox model from task 1.2_
+  - _Requirements: Req 3 (Layout Analysis), Req 5 (Structure Recognition)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in computational geometry | Task: Implement bounding box utility functions for geometric operations (intersection, union, contains, overlap) and spatial analysis for requirements 3 and 5 | Restrictions: Use pure Python, ensure numerical accuracy, handle edge cases | Leverage: BoundingBox model, type hints | Requirements: Req 3, 5 | Success: All bbox operations work correctly, spatial analysis helpers determine reading order accurately, edge cases handled | Instructions: Mark [-], implement bbox utility functions, add comprehensive tests, log with artifacts (functions: intersection, union, contains, overlap_area, spatial analysis helpers), mark [x]_
+
+- [ ] 2.2. Implement image processing utilities
+  - Files: `src/smart_pdf_scanner/utils/image_utils.py`
+  - Create functions for image preprocessing: deskew, denoise, contrast enhancement
+  - Add image format conversion and saving utilities
+  - _Leverage: Pillow, OpenCV_
+  - _Requirements: Req 4 (OCR Processing), Req 7 (Image Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image processing and OpenCV | Task: Implement image preprocessing utilities (deskew, denoise, contrast enhancement) and format conversion for requirements 4 and 7 | Restrictions: Use Pillow and OpenCV, ensure quality preservation, handle various image formats | Leverage: Pillow (PIL), OpenCV (cv2), numpy | Requirements: Req 4, 7 | Success: Preprocessing improves OCR accuracy, format conversion works for all supported types, images save correctly | Instructions: Mark [-], implement preprocessing functions, test with sample images, log with artifacts (functions: deskew, denoise, enhance_contrast, convert_format, save_image), mark [x]_
+
+- [ ] 2.3. Implement text processing utilities
+  - Files: `src/smart_pdf_scanner/utils/text_utils.py`
+  - Create functions for text cleaning, normalization, similarity matching
+  - Add reading order determination helpers
+  - _Leverage: Standard Python string methods_
+  - _Requirements: Req 5 (Structure Recognition)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in text processing and NLP | Task: Implement text utility functions for cleaning, normalization, similarity matching, and reading order determination for requirement 5 | Restrictions: Use standard library where possible, ensure Unicode handling, optimize for performance | Leverage: Python string methods, re module, difflib | Requirements: Req 5 | Success: Text cleaning handles edge cases, similarity matching works accurately, reading order helpers support structure recognition | Instructions: Mark [-], implement text utility functions, test with various text samples, log with artifacts (functions: clean_text, normalize, similarity_score, determine_reading_order), mark [x]_
+
+- [ ] 2.4. Implement caching utilities
+  - Files: `src/smart_pdf_scanner/utils/cache.py`
+  - Create file-based cache for OCR results and layout detections
+  - Add cache key generation based on content hash
+  - Implement cache expiration and cleanup
+  - _Leverage: hashlib for hashing, pathlib for file operations_
+  - _Requirements: Req 10 (Configuration - caching), Design: Performance Optimization_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in caching strategies and file I/O | Task: Implement file-based caching system with content hashing, expiration, and cleanup for performance optimization per requirement 10 | Restrictions: Use file system for storage, ensure thread safety, implement proper cleanup | Leverage: hashlib, pathlib, json, threading.Lock | Requirements: Req 10 | Success: Cache stores and retrieves results correctly, content hashing prevents duplicates, expiration works, cleanup removes old entries | Instructions: Mark [-], implement cache class with get/set/clear methods, test caching behavior, log with artifacts (classes: FileCache with methods: get, set, clear, cleanup), mark [x]_
+
+## Phase 3: Engine Interfaces & Implementations
+
+- [ ] 3.1. Create OCR engine base interface
+  - Files: `src/smart_pdf_scanner/engines/ocr/base.py`, `src/smart_pdf_scanner/engines/ocr/__init__.py`
+  - Define OCREngine abstract base class with extract_text, get_confidence methods
+  - Create OCRResult model
+  - _Leverage: Python ABC module, Pydantic_
+  - _Requirements: Req 4 (OCR Processing), Design: OCREngine Interface_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in interface design and abstraction | Task: Define OCREngine abstract base class and OCRResult model following design specifications for requirement 4 | Restrictions: Use ABC for interface, define clear contracts, ensure extensibility | Leverage: Python abc.ABC, abstractmethod, Pydantic BaseModel | Requirements: Req 4 | Success: Interface defines clear contract, OCRResult captures all needed data, implementations can extend easily | Instructions: Mark [-], create OCREngine ABC with abstract methods, create OCRResult model, log with artifacts (classes: OCREngine interface, OCRResult model), mark [x]_
+
+- [ ] 3.2. Implement Tesseract OCR engine
+  - Files: `src/smart_pdf_scanner/engines/ocr/tesseract.py`
+  - Implement TesseractEngine extending OCREngine
+  - Add language configuration and confidence extraction
+  - _Leverage: pytesseract, OCREngine base from task 3.1, image utilities from task 2.2_
+  - _Requirements: Req 4 (OCR Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and Tesseract integration | Task: Implement TesseractEngine class extending OCREngine interface, with language support and confidence extraction for requirement 4 | Restrictions: Must implement all abstract methods, handle Tesseract errors gracefully, support multiple languages | Leverage: pytesseract, OCREngine interface, image preprocessing utilities | Requirements: Req 4 | Success: Tesseract OCR works correctly, confidence scores extracted, multiple languages supported, errors handled | Instructions: Mark [-], implement TesseractEngine class, test with sample images, log with artifacts (classes: TesseractEngine with methods: extract_text, get_confidence), mark [x]_
+
+- [ ] 3.3. Implement EasyOCR engine (fallback)
+  - Files: `src/smart_pdf_scanner/engines/ocr/easyocr.py`
+  - Implement EasyOCREngine extending OCREngine
+  - Configure as fallback for low-confidence Tesseract results
+  - _Leverage: easyocr, OCREngine base from task 3.1_
+  - _Requirements: Req 4 (OCR Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and EasyOCR library | Task: Implement EasyOCREngine as fallback OCR engine extending OCREngine interface for requirement 4 | Restrictions: Must implement interface, handle initialization properly, support GPU and CPU modes | Leverage: easyocr library, OCREngine interface | Requirements: Req 4 | Success: EasyOCR works as fallback, handles handwriting better than Tesseract, GPU/CPU modes work | Instructions: Mark [-], implement EasyOCREngine class, test fallback behavior, log with artifacts (classes: EasyOCREngine with methods), mark [x]_
+
+- [ ] 3.4. Create layout engine base interface
+  - Files: `src/smart_pdf_scanner/engines/layout/base.py`, `src/smart_pdf_scanner/engines/layout/__init__.py`
+  - Define LayoutEngine abstract base class with detect_layout, get_confidence methods
+  - _Leverage: Python ABC module_
+  - _Requirements: Req 3 (Layout Analysis), Design: LayoutEngine Interface_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in plugin architectures | Task: Define LayoutEngine abstract base class following design specifications for requirement 3 | Restrictions: Use ABC, define clear interface contract, ensure extensibility for multiple implementations | Leverage: Python abc.ABC, abstractmethod, Element models | Requirements: Req 3 | Success: Interface defines clear contract for layout detection, supports multiple implementations, type-safe | Instructions: Mark [-], create LayoutEngine ABC, log with artifacts (classes: LayoutEngine interface with abstract methods), mark [x]_
+
+- [ ] 3.5. Implement LayoutParser engine
+  - Files: `src/smart_pdf_scanner/engines/layout/layoutparser.py`
+  - Implement LayoutParserEngine extending LayoutEngine
+  - Configure Detectron2 model for layout detection
+  - Map detected elements to Element types
+  - _Leverage: layoutparser, detectron2, LayoutEngine base from task 3.4_
+  - _Requirements: Req 3 (Layout Analysis)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in computer vision and LayoutParser | Task: Implement LayoutParserEngine using Detectron2 for layout detection, extending LayoutEngine interface for requirement 3 | Restrictions: Must implement interface, handle model loading efficiently, map detections to Element types correctly | Leverage: layoutparser, detectron2, LayoutEngine interface, Element models | Requirements: Req 3 | Success: Layout detection works accurately, elements classified correctly, confidence scores provided, model loads efficiently | Instructions: Mark [-], implement LayoutParserEngine class, test with sample pages, log with artifacts (classes: LayoutParserEngine with methods: detect_layout, get_confidence), mark [x]_
+
+- [ ] 3.6. Implement heuristic layout engine (fallback)
+  - Files: `src/smart_pdf_scanner/engines/layout/heuristic.py`
+  - Implement HeuristicEngine using text positioning and spacing
+  - Use as fallback when LayoutParser fails or confidence is low
+  - _Leverage: LayoutEngine base from task 3.4, bbox utilities from task 2.1_
+  - _Requirements: Req 3 (Layout Analysis)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in heuristic algorithms and spatial analysis | Task: Implement HeuristicEngine using rule-based layout detection as fallback, extending LayoutEngine interface for requirement 3 | Restrictions: Must implement interface, use only text positioning data, handle edge cases | Leverage: LayoutEngine interface, bbox utilities, text positioning | Requirements: Req 3 | Success: Heuristic detection works for simple layouts, provides reasonable fallback, handles various page structures | Instructions: Mark [-], implement HeuristicEngine with rule-based detection, test with various layouts, log with artifacts (classes: HeuristicEngine with detection logic), mark [x]_
+
+- [ ] 3.7. Create LLM provider base interface
+  - Files: `src/smart_pdf_scanner/engines/llm/base.py`, `src/smart_pdf_scanner/engines/llm/__init__.py`
+  - Define LLMProvider abstract base class with generate_text, generate_with_vision methods
+  - _Leverage: Python ABC module_
+  - _Requirements: Req 8 (Semantic Enhancement), Design: LLMProvider Interface_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in AI/ML integration patterns | Task: Define LLMProvider abstract base class for text and vision generation following design specifications for requirement 8 | Restrictions: Use ABC, support both text and vision models, ensure provider-agnostic interface | Leverage: Python abc.ABC, abstractmethod | Requirements: Req 8 | Success: Interface supports text and vision generation, provider-agnostic, extensible for multiple LLM providers | Instructions: Mark [-], create LLMProvider ABC with abstract methods, log with artifacts (classes: LLMProvider interface), mark [x]_
+
+- [ ] 3.8. Implement OpenAI provider
+  - Files: `src/smart_pdf_scanner/engines/llm/openai.py`
+  - Implement OpenAIProvider extending LLMProvider
+  - Support GPT-4 and GPT-4V for text and vision
+  - Add token estimation and cost tracking
+  - _Leverage: openai library, LLMProvider base from task 3.7_
+  - _Requirements: Req 8 (Semantic Enhancement)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OpenAI API integration | Task: Implement OpenAIProvider with GPT-4 and GPT-4V support, extending LLMProvider interface for requirement 8 | Restrictions: Must implement interface, handle API errors with retry, track token usage, support vision models | Leverage: openai library, LLMProvider interface, python-dotenv for API keys | Requirements: Req 8 | Success: OpenAI integration works for text and vision, token tracking accurate, errors handled gracefully | Instructions: Mark [-], implement OpenAIProvider class, test with API, log with artifacts (classes: OpenAIProvider with methods: generate_text, generate_with_vision, estimate_tokens), mark [x]_
+
+- [ ] 3.9. Implement Anthropic provider
+  - Files: `src/smart_pdf_scanner/engines/llm/anthropic.py`
+  - Implement AnthropicProvider extending LLMProvider
+  - Support Claude models for text and vision
+  - _Leverage: anthropic library, LLMProvider base from task 3.7_
+  - _Requirements: Req 8 (Semantic Enhancement)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in Anthropic Claude API | Task: Implement AnthropicProvider with Claude support, extending LLMProvider interface for requirement 8 | Restrictions: Must implement interface, handle API specifics, support vision models | Leverage: anthropic library, LLMProvider interface | Requirements: Req 8 | Success: Anthropic integration works correctly, supports text and vision, API errors handled | Instructions: Mark [-], implement AnthropicProvider class, test integration, log with artifacts (classes: AnthropicProvider with methods), mark [x]_
+
+## Phase 4: Processing Stages
+
+- [ ] 4.1. Create ProcessingStage base interface
+  - Files: `src/smart_pdf_scanner/stages/base.py`, `src/smart_pdf_scanner/stages/__init__.py`
+  - Define ProcessingStage abstract base class with process, validate methods
+  - Create ValidationWarning model
+  - _Leverage: Python ABC module, Pydantic_
+  - _Requirements: Req 1 (Pipeline Orchestration), Design: ProcessingStage Interface_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in pipeline architectures | Task: Define ProcessingStage abstract base class and ValidationWarning model following design specifications for requirement 1 | Restrictions: Use ABC, define clear stage contract, ensure all stages follow same pattern | Leverage: Python abc.ABC, abstractmethod, Pydantic | Requirements: Req 1 | Success: Interface defines clear stage contract, ValidationWarning captures issues, stages can be chained | Instructions: Mark [-], create ProcessingStage ABC and ValidationWarning model, log with artifacts (classes: ProcessingStage interface, ValidationWarning), mark [x]_
+
+- [ ] 4.2. Implement PDFParser stage
+  - Files: `src/smart_pdf_scanner/stages/pdf_parser.py`
+  - Implement PDFParser extending ProcessingStage
+  - Extract text with positions, images, metadata using PyMuPDF
+  - Create Page objects with elements
+  - _Leverage: PyMuPDF (fitz), ProcessingStage base from task 4.1, models from Phase 1_
+  - _Requirements: Req 2 (PDF Parsing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in PDF processing and PyMuPDF | Task: Implement PDFParser stage to extract text, images, and metadata from PDFs using PyMuPDF, following requirement 2 and design specifications | Restrictions: Must implement ProcessingStage interface, handle various PDF types, extract positioning data | Leverage: PyMuPDF (fitz), ProcessingStage interface, Document/Page/Element models, image utilities | Requirements: Req 2 | Success: Text extracted with accurate positions, images saved to assets, metadata captured, Page objects created correctly | Instructions: Mark [-], implement PDFParser class with extract methods, test with various PDFs, log with artifacts (classes: PDFParser with methods: process, extract_text_with_positions, extract_images, extract_metadata), mark [x]_
+
+- [ ] 4.3. Implement LayoutAnalyzer stage
+  - Files: `src/smart_pdf_scanner/stages/layout_analyzer.py`
+  - Implement LayoutAnalyzer extending ProcessingStage
+  - Use pluggable layout engine to detect elements
+  - Classify elements and detect columns
+  - _Leverage: ProcessingStage base, LayoutEngine interface, bbox utilities_
+  - _Requirements: Req 3 (Layout Analysis)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in layout analysis and computer vision | Task: Implement LayoutAnalyzer stage using pluggable layout engines to detect and classify document elements, following requirement 3 | Restrictions: Must implement ProcessingStage, support engine switching, handle low confidence with fallback | Leverage: ProcessingStage interface, LayoutEngine interface, bbox utilities, Element models | Requirements: Req 3 | Success: Elements detected and classified accurately, columns identified, fallback works when needed, confidence scores tracked | Instructions: Mark [-], implement LayoutAnalyzer with engine integration, test with multi-column PDFs, log with artifacts (classes: LayoutAnalyzer with methods: process, detect_elements, classify_element, detect_columns), mark [x]_
+
+- [ ] 4.4. Implement OCRProcessor stage
+  - Files: `src/smart_pdf_scanner/stages/ocr_processor.py`
+  - Implement OCRProcessor extending ProcessingStage
+  - Use pluggable OCR engines with fallback mechanism
+  - Preprocess images before OCR
+  - OCR image-based pages and text within images
+  - _Leverage: ProcessingStage base, OCREngine interface, image utilities_
+  - _Requirements: Req 4 (OCR Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and image preprocessing | Task: Implement OCRProcessor stage with pluggable OCR engines, fallback mechanism, and image preprocessing following requirement 4 | Restrictions: Must implement ProcessingStage, support primary and fallback engines, preprocess images | Leverage: ProcessingStage interface, OCREngine interface, image preprocessing utilities | Requirements: Req 4 | Success: OCR works on scanned pages, fallback activates on low confidence, preprocessing improves accuracy, text within images extracted | Instructions: Mark [-], implement OCRProcessor with engine fallback, test with scanned PDFs, log with artifacts (classes: OCRProcessor with methods: process, ocr_page, ocr_image, preprocess_image), mark [x]_
+
+- [ ] 4.5. Implement StructureRecognizer stage
+  - Files: `src/smart_pdf_scanner/stages/structure_recognizer.py`
+  - Implement StructureRecognizer extending ProcessingStage
+  - Identify headings based on font size and weight
+  - Build heading hierarchy (H1-H6)
+  - Determine reading order using spatial analysis
+  - Link table of contents to sections
+  - _Leverage: ProcessingStage base, text utilities, bbox utilities_
+  - _Requirements: Req 5 (Structure Recognition)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in document structure analysis and NLP | Task: Implement StructureRecognizer stage to identify headings, build hierarchy, determine reading order, and link TOC following requirement 5 | Restrictions: Must implement ProcessingStage, use font analysis for headings, spatial analysis for reading order | Leverage: ProcessingStage interface, text utilities, bbox utilities, DocumentStructure model | Requirements: Req 5 | Success: Headings identified correctly, hierarchy built accurately, reading order logical, TOC linked to sections | Instructions: Mark [-], implement StructureRecognizer with hierarchy building, test with structured documents, log with artifacts (classes: StructureRecognizer with methods: process, identify_headings, build_hierarchy, determine_reading_order, link_toc), mark [x]_
+
+- [ ] 4.6. Implement TableProcessor stage
+  - Files: `src/smart_pdf_scanner/stages/table_processor.py`
+  - Implement TableProcessor extending ProcessingStage
+  - Use pdfplumber for simple tables, table-transformer for complex
+  - Convert tables to Markdown format
+  - Optionally export to CSV
+  - _Leverage: ProcessingStage base, pdfplumber, table-transformer_
+  - _Requirements: Req 6 (Table Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in table extraction and data processing | Task: Implement TableProcessor stage using pdfplumber and table-transformer to extract and convert tables following requirement 6 | Restrictions: Must implement ProcessingStage, handle simple and complex tables, generate valid Markdown | Leverage: ProcessingStage interface, pdfplumber, table-transformer, Table model | Requirements: Req 6 | Success: Simple tables extracted with pdfplumber, complex tables with transformer, Markdown conversion accurate, CSV export works | Instructions: Mark [-], implement TableProcessor with dual extraction methods, test with various tables, log with artifacts (classes: TableProcessor with methods: process, extract_table, convert_to_markdown, export_to_csv), mark [x]_
+
+- [ ] 4.7. Implement ImageProcessor stage
+  - Files: `src/smart_pdf_scanner/stages/image_processor.py`
+  - Implement ImageProcessor extending ProcessingStage
+  - Classify images by type (photo, diagram, chart, etc.)
+  - Extract text from images using OCR
+  - Generate descriptions (basic or LLM-enhanced)
+  - Associate captions with images
+  - _Leverage: ProcessingStage base, OCREngine, LLMProvider (optional)_
+  - _Requirements: Req 7 (Image Processing)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image analysis and classification | Task: Implement ImageProcessor stage to classify images, extract text, and generate descriptions following requirement 7 | Restrictions: Must implement ProcessingStage, support basic and LLM descriptions, handle missing LLM gracefully | Leverage: ProcessingStage interface, OCREngine for text extraction, LLMProvider for descriptions, Image model | Requirements: Req 7 | Success: Images classified correctly, OCR extracts text, descriptions generated (basic or enhanced), captions associated | Instructions: Mark [-], implement ImageProcessor with classification and description, test with various images, log with artifacts (classes: ImageProcessor with methods: process, classify_image, extract_text_from_image, generate_description), mark [x]_
+
+- [ ] 4.8. Implement SemanticEnhancer stage (optional)
+  - Files: `src/smart_pdf_scanner/stages/semantic_enhancer.py`
+  - Implement SemanticEnhancer extending ProcessingStage
+  - Use LLM to refine ambiguous heading hierarchies
+  - Enhance image descriptions with context
+  - Resolve structural ambiguities
+  - _Leverage: ProcessingStage base, LLMProvider interface_
+  - _Requirements: Req 8 (Semantic Enhancement)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in LLM integration and prompt engineering | Task: Implement SemanticEnhancer stage to use LLM for refining structures and enhancing descriptions following requirement 8 | Restrictions: Must implement ProcessingStage, minimize token usage, handle LLM failures gracefully | Leverage: ProcessingStage interface, LLMProvider interface, caching utilities | Requirements: Req 8 | Success: Ambiguous hierarchies refined, descriptions enhanced with context, token usage minimized, fallback to deterministic results works | Instructions: Mark [-], implement SemanticEnhancer with LLM calls, test enhancement quality, log with artifacts (classes: SemanticEnhancer with methods: process, refine_hierarchy, enhance_descriptions, resolve_ambiguities), mark [x]_
+
+- [ ] 4.9. Implement MarkdownGenerator stage
+  - Files: `src/smart_pdf_scanner/stages/markdown_generator.py`
+  - Implement MarkdownGenerator extending ProcessingStage
+  - Assemble elements in reading order
+  - Format headings, tables, images as Markdown
+  - Include page numbers if configured
+  - Write output to file
+  - _Leverage: ProcessingStage base, Document model_
+  - _Requirements: Req 9 (Markdown Generation)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in text formatting and file I/O | Task: Implement MarkdownGenerator stage to assemble and format final Markdown output following requirement 9 | Restrictions: Must implement ProcessingStage, generate valid Markdown, handle all element types | Leverage: ProcessingStage interface, Document/Element models, pathlib | Requirements: Req 9 | Success: Markdown assembled in correct order, all elements formatted properly, page numbers included when configured, file written successfully | Instructions: Mark [-], implement MarkdownGenerator with formatting methods, test output quality, log with artifacts (classes: MarkdownGenerator with methods: process, assemble_markdown, format_heading, format_table, format_image, write_output), mark [x]_
+
+## Phase 5: Pipeline Orchestration
+
+- [ ] 5.1. Implement Pipeline orchestrator
+  - Files: `src/smart_pdf_scanner/core/pipeline.py`, `src/smart_pdf_scanner/core/__init__.py`
+  - Implement Pipeline class with stage execution
+  - Add input validation (file exists, valid PDF, size limits)
+  - Implement progress event emission
+  - Handle stage failures with partial processing
+  - _Leverage: ProcessingStage interface, Config model, Document model_
+  - _Requirements: Req 1 (Pipeline Orchestration)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Engineer specializing in pipeline architectures and orchestration | Task: Implement Pipeline class to orchestrate stage execution with validation, progress tracking, and error handling following requirement 1 | Restrictions: Must execute stages in sequence, handle failures gracefully, emit progress events, validate inputs | Leverage: ProcessingStage interface, Config model, Document model, logging utilities | Requirements: Req 1 | Success: Pipeline executes all stages correctly, validates inputs, emits progress, handles failures with partial processing, returns ProcessingResult | Instructions: Mark [-], implement Pipeline class with orchestration logic, test with sample PDFs, log with artifacts (classes: Pipeline with methods: __init__, process, validate_input, emit_progress), mark [x]_
+
+- [ ] 5.2. Create engine factory classes
+  - Files: `src/smart_pdf_scanner/engines/factories.py`
+  - Implement OCREngineFactory, LayoutEngineFactory, LLMProviderFactory
+  - Create engines based on configuration
+  - _Leverage: Engine interfaces and implementations from Phase 3_
+  - _Requirements: Req 10 (Configuration Management)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in factory patterns and dependency injection | Task: Implement factory classes to create engine instances based on configuration following requirement 10 | Restrictions: Use factory pattern, support all implemented engines, handle missing dependencies | Leverage: Engine interfaces, Config model, importlib for dynamic loading | Requirements: Req 10 | Success: Factories create correct engine instances, configuration drives selection, missing dependencies handled gracefully | Instructions: Mark [-], implement factory classes, test engine creation, log with artifacts (classes: OCREngineFactory, LayoutEngineFactory, LLMProviderFactory with create methods), mark [x]_
+
+- [ ] 5.3. Implement pipeline builder with configuration
+  - Files: `src/smart_pdf_scanner/core/pipeline.py` (extend from 5.1)
+  - Add PipelineBuilder class to construct pipeline from config
+  - Initialize stages with appropriate engines based on config
+  - Support processing mode presets (fast, balanced, high-fidelity)
+  - _Leverage: Pipeline from task 5.1, factories from task 5.2, Config from task 1.6_
+  - _Requirements: Req 1 (Pipeline Orchestration), Req 10 (Configuration)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in builder patterns and configuration-driven design | Task: Implement PipelineBuilder to construct configured pipelines with appropriate stages and engines following requirements 1 and 10 | Restrictions: Use builder pattern, support all processing modes, initialize engines correctly | Leverage: Pipeline class, engine factories, Config model, ProcessingStage implementations | Requirements: Req 1, 10 | Success: Builder creates pipelines from config, processing modes work correctly, stages initialized with right engines | Instructions: Mark [-], implement PipelineBuilder class, test with different configs, log with artifacts (classes: PipelineBuilder with methods: build, add_stage, configure_engines), mark [x]_
+
+## Phase 6: Visualization
+
+- [ ] 6.1. Implement page renderer with bounding boxes
+  - Files: `src/smart_pdf_scanner/visualization/renderer.py`, `src/smart_pdf_scanner/visualization/__init__.py`
+  - Render PDF pages as images
+  - Overlay bounding boxes with transparency
+  - Use color coding by element type
+  - _Leverage: PyMuPDF for rendering, Pillow for drawing, Element models_
+  - _Requirements: Req 11 (Visualization Support)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image rendering and visualization | Task: Implement page renderer to visualize detected elements with color-coded bounding boxes following requirement 11 | Restrictions: Use PyMuPDF for page rendering, Pillow for overlay, support transparency control | Leverage: PyMuPDF (fitz), Pillow (PIL), Element models, BoundingBox | Requirements: Req 11 | Success: Pages render correctly, bounding boxes overlay accurately, colors distinguish element types, transparency adjustable | Instructions: Mark [-], implement renderer with bbox overlay, test visualization output, log with artifacts (classes: PageRenderer with methods: render_page, draw_bbox, apply_colors), mark [x]_
+
+- [ ] 6.2. Implement color scheme for element types
+  - Files: `src/smart_pdf_scanner/visualization/colors.py`
+  - Define color mappings for each ElementType
+  - Support custom color schemes
+  - _Leverage: ElementType enum from task 1.2_
+  - _Requirements: Req 11 (Visualization Support)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in color theory and visualization design | Task: Implement color scheme system for element type visualization following requirement 11 | Restrictions: Use distinct, accessible colors, support customization, provide sensible defaults | Leverage: ElementType enum, Python dictionaries | Requirements: Req 11 | Success: Each element type has distinct color, colors are visually distinguishable, custom schemes supported | Instructions: Mark [-], implement color scheme with mappings, test color distinctiveness, log with artifacts (functions: get_color_scheme, apply_color_to_element), mark [x]_
+
+- [ ] 6.3. Implement visualization export
+  - Files: `src/smart_pdf_scanner/visualization/export.py`
+  - Export visualization images to files
+  - Support multiple pages
+  - Add metadata annotations
+  - _Leverage: Renderer from task 6.1, Pillow_
+  - _Requirements: Req 11 (Visualization Support)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image export and file I/O | Task: Implement visualization export to save rendered pages with bounding boxes following requirement 11 | Restrictions: Support common image formats (PNG, JPEG), handle multi-page exports, add metadata | Leverage: PageRenderer, Pillow, pathlib | Requirements: Req 11 | Success: Visualizations export correctly, multiple pages handled, metadata included, various formats supported | Instructions: Mark [-], implement export functionality, test with multi-page PDFs, log with artifacts (functions: export_visualization, export_all_pages), mark [x]_
+
+## Phase 7: Testing & Documentation
+
+- [ ] 7.1. Create unit tests for data models
+  - Files: `tests/unit/test_models/test_document.py`, `tests/unit/test_models/test_elements.py`, `tests/unit/test_models/test_config.py`
+  - Test model validation, serialization, helper methods
+  - Test configuration loading and hierarchy
+  - _Leverage: pytest, Pydantic models from Phase 1_
+  - _Requirements: All model-related requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in Python unit testing and pytest | Task: Create comprehensive unit tests for all data models covering validation, serialization, and helper methods | Restrictions: Test both valid and invalid inputs, ensure good coverage, use pytest fixtures | Leverage: pytest, Pydantic models, pytest fixtures | Requirements: All model requirements | Success: All models tested thoroughly, validation edge cases covered, serialization works correctly, tests pass consistently | Instructions: Mark [-], write unit tests for all models, achieve >90% coverage, log with artifacts (test files created, test functions for each model class), mark [x]_
+
+- [ ] 7.2. Create unit tests for utilities
+  - Files: `tests/unit/test_utils/test_bbox.py`, `tests/unit/test_utils/test_image_utils.py`, `tests/unit/test_utils/test_text_utils.py`, `tests/unit/test_utils/test_cache.py`
+  - Test bbox operations, image processing, text utilities, caching
+  - _Leverage: pytest, utility modules from Phase 2_
+  - _Requirements: Utility-related requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing utility functions and edge cases | Task: Create comprehensive unit tests for all utility modules covering bbox operations, image processing, text utilities, and caching | Restrictions: Test edge cases and error conditions, ensure numerical accuracy for bbox, verify cache behavior | Leverage: pytest, utility modules, sample test data | Requirements: Utility requirements | Success: All utilities tested thoroughly, edge cases covered, numerical operations accurate, cache behavior verified | Instructions: Mark [-], write unit tests for utilities, test edge cases, log with artifacts (test files and functions for each utility module), mark [x]_
+
+- [ ] 7.3. Create unit tests for engines
+  - Files: `tests/unit/test_engines/test_ocr_engines.py`, `tests/unit/test_engines/test_layout_engines.py`, `tests/unit/test_engines/test_llm_providers.py`
+  - Test engine implementations with mocked dependencies
+  - Test fallback mechanisms
+  - _Leverage: pytest, pytest-mock, engine implementations from Phase 3_
+  - _Requirements: Engine-related requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing external integrations and mocking | Task: Create unit tests for all engine implementations with mocked external dependencies (OCR, layout, LLM) | Restrictions: Mock external APIs and libraries, test interface compliance, verify fallback behavior | Leverage: pytest, pytest-mock, engine implementations | Requirements: Engine requirements | Success: All engines tested with mocked dependencies, interface contracts verified, fallback mechanisms work, API errors handled | Instructions: Mark [-], write unit tests with mocks, test fallback logic, log with artifacts (test files for each engine type), mark [x]_
+
+- [ ] 7.4. Create unit tests for processing stages
+  - Files: `tests/unit/test_stages/test_pdf_parser.py`, `tests/unit/test_stages/test_layout_analyzer.py`, etc.
+  - Test each stage independently with mock engines
+  - Test stage validation and error handling
+  - _Leverage: pytest, pytest-mock, stage implementations from Phase 4_
+  - _Requirements: Stage-related requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing pipeline components and isolation | Task: Create unit tests for all processing stages with mocked engines and dependencies | Restrictions: Test stages in isolation, mock all engines, verify ProcessingStage interface compliance | Leverage: pytest, pytest-mock, stage implementations, mock engines | Requirements: Stage requirements | Success: All stages tested independently, interface compliance verified, error handling works, validation catches issues | Instructions: Mark [-], write unit tests for each stage, mock dependencies, log with artifacts (test files for each stage), mark [x]_
+
+- [ ] 7.5. Create integration tests for pipeline
+  - Files: `tests/integration/test_end_to_end.py`, `tests/integration/test_pipeline_stages.py`
+  - Test full pipeline with sample PDFs
+  - Test stage interactions and data flow
+  - Test different processing modes
+  - _Leverage: pytest, Pipeline from Phase 5, sample PDFs_
+  - _Requirements: All requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in integration testing and end-to-end workflows | Task: Create integration tests for full pipeline processing with real sample PDFs covering all processing modes | Restrictions: Use real engines (not mocks), test with diverse PDF types, verify output quality | Leverage: pytest, Pipeline, sample PDFs (simple, multi-column, scanned, tables), ProcessingResult | Requirements: All | Success: Pipeline processes all PDF types correctly, processing modes work as expected, output quality verified, stage interactions smooth | Instructions: Mark [-], create integration tests with sample PDFs, test all modes, log with artifacts (test files, sample PDFs used), mark [x]_
+
+- [ ] 7.6. Create test fixtures and sample PDFs
+  - Files: `tests/fixtures/pdfs/`, `tests/fixtures/expected/`, `tests/conftest.py`
+  - Collect or create sample PDFs (simple, multi-column, scanned, tables, mixed)
+  - Create expected Markdown outputs for validation
+  - Set up pytest fixtures for common test data
+  - _Leverage: pytest fixtures_
+  - _Requirements: Testing requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in test data management and fixtures | Task: Create comprehensive test fixtures including sample PDFs and expected outputs for validation | Restrictions: Cover diverse PDF types, create realistic test cases, ensure expected outputs are accurate | Leverage: pytest fixtures, sample PDF generation tools | Requirements: Testing | Success: Diverse PDF samples available, expected outputs accurate, pytest fixtures reusable across tests | Instructions: Mark [-], collect/create sample PDFs, generate expected outputs, set up fixtures, log with artifacts (fixture files, sample PDFs, expected outputs), mark [x]_
+
+- [ ] 7.7. Add docstrings and type hints
+  - Files: All Python files in `src/smart_pdf_scanner/`
+  - Add Google-style docstrings to all public functions and classes
+  - Ensure complete type hints on all function signatures
+  - _Leverage: Python type hints, docstring conventions_
+  - _Requirements: Non-functional requirement: Usability_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in documentation and type systems | Task: Add comprehensive Google-style docstrings and type hints to all public APIs across the codebase | Restrictions: Follow Google docstring format, add type hints to all signatures, document parameters and return values | Leverage: Python type hints, typing module, docstring examples | Requirements: Usability | Success: All public APIs documented, type hints complete, docstrings follow Google style, examples provided where helpful | Instructions: Mark [-], add docstrings and type hints systematically, run mypy for validation, log with artifacts (files modified, documentation coverage), mark [x]_
+
+- [ ] 7.8. Create README and user documentation
+  - Files: `README.md`, `docs/getting-started.md`, `docs/user-guide/`
+  - Write project README with installation and quick start
+  - Create user guide for pipeline usage
+  - Document configuration options
+  - _Leverage: Markdown, documentation templates_
+  - _Requirements: Non-functional requirement: Usability_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Technical Writer with expertise in developer documentation | Task: Create comprehensive README and user documentation covering installation, quick start, and configuration | Restrictions: Use clear language, provide code examples, cover all major features | Leverage: Markdown, existing code examples | Requirements: Usability | Success: README is clear and complete, getting started guide works for new users, configuration well-documented | Instructions: Mark [-], write documentation with examples, test instructions, log with artifacts (documentation files created), mark [x]_
+
+## Phase 8: Configuration Presets & Final Integration
+
+- [ ] 8.1. Create configuration preset files
+  - Files: `config/fast-mode.yaml`, `config/balanced-mode.yaml`, `config/high-fidelity-mode.yaml`
+  - Define preset configurations for each processing mode
+  - Document mode differences and use cases
+  - _Leverage: Config model from task 1.6, design specifications_
+  - _Requirements: Req 10 (Configuration Management)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: DevOps Engineer with expertise in configuration management | Task: Create YAML configuration preset files for fast, balanced, and high-fidelity processing modes following design specifications | Restrictions: Follow YAML syntax, match Config model schema, document mode trade-offs | Leverage: Config model, design.md preset specifications | Requirements: Req 10 | Success: All three presets load correctly, modes have appropriate stage/engine configurations, trade-offs documented | Instructions: Mark [-], create preset YAML files, validate against Config model, log with artifacts (config files created with mode settings), mark [x]_
+
+- [ ] 8.2. Add environment variable support
+  - Files: `src/smart_pdf_scanner/core/config.py` (extend from task 1.6), `.env.example`
+  - Add environment variable loading for API keys and sensitive config
+  - Create .env.example template
+  - _Leverage: python-dotenv, ConfigManager from task 1.6_
+  - _Requirements: Req 10 (Configuration Management), Security_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in security and configuration management | Task: Extend ConfigManager to load environment variables for API keys and sensitive settings, create .env.example template | Restrictions: Never commit actual API keys, use python-dotenv, document all env vars | Leverage: python-dotenv, ConfigManager, os.environ | Requirements: Req 10, Security | Success: Environment variables load correctly, API keys secured, .env.example documents all options | Instructions: Mark [-], add env var loading to ConfigManager, create .env.example, log with artifacts (functions: env var loading, .env.example file), mark [x]_
+
+- [ ] 8.3. Implement command-line entry point (basic)
+  - Files: `src/smart_pdf_scanner/__main__.py`
+  - Create basic CLI entry point for testing pipeline
+  - Accept PDF path and config file as arguments
+  - Output processing results
+  - _Leverage: Pipeline from Phase 5, ConfigManager from task 1.6_
+  - _Requirements: Req 1 (Pipeline Orchestration)_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in CLI applications | Task: Create basic command-line entry point to run pipeline for testing and validation | Restrictions: Use argparse, support PDF path and config file arguments, output results clearly | Leverage: Pipeline, ConfigManager, argparse, pathlib | Requirements: Req 1 | Success: CLI runs pipeline successfully, accepts arguments, outputs results, errors handled gracefully | Instructions: Mark [-], implement __main__.py with argparse, test CLI execution, log with artifacts (files: __main__.py with CLI logic), mark [x]_
+
+- [ ] 8.4. Final integration testing and bug fixes
+  - Files: Various (bug fixes as needed)
+  - Run full integration tests with all processing modes
+  - Fix any integration issues discovered
+  - Validate output quality across different PDF types
+  - _Leverage: Integration tests from task 7.5, sample PDFs from task 7.6_
+  - _Requirements: All requirements_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Senior Python Developer with expertise in debugging and integration | Task: Perform final integration testing across all processing modes and PDF types, fix any bugs discovered | Restrictions: Must not break existing functionality, maintain test coverage, document all fixes | Leverage: Integration tests, sample PDFs, pytest, debugging tools | Requirements: All | Success: All integration tests pass, no critical bugs remain, output quality meets requirements across PDF types | Instructions: Mark [-], run integration tests, fix bugs systematically, validate fixes, log with artifacts (files modified for bug fixes, issues resolved), mark [x]_
+
+- [ ] 8.5. Performance optimization and profiling
+  - Files: Various (optimizations as needed), `tests/performance/test_benchmarks.py`
+  - Profile pipeline performance with different PDF sizes
+  - Optimize bottlenecks (memory usage, processing speed)
+  - Verify performance targets (1-15 sec/page)
+  - _Leverage: cProfile, memory_profiler, pytest-benchmark_
+  - _Requirements: Non-functional requirement: Performance_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Performance Engineer with expertise in profiling and optimization | Task: Profile pipeline performance, identify bottlenecks, optimize to meet performance targets (1-15 sec/page depending on mode) | Restrictions: Maintain code quality, don't sacrifice accuracy for speed, document optimizations | Leverage: cProfile, memory_profiler, pytest-benchmark, optimization techniques | Requirements: Performance | Success: Performance targets met for all modes, memory usage within limits, bottlenecks eliminated, benchmarks pass | Instructions: Mark [-], profile with various PDFs, optimize critical paths, create benchmarks, log with artifacts (optimizations made, benchmark results), mark [x]_
+
+- [ ] 8.6. Code quality and linting
+  - Files: `.ruff.toml`, `pyproject.toml` (add tool configs), all Python files
+  - Set up ruff for linting and black for formatting
+  - Run mypy for type checking
+  - Fix all linting and type errors
+  - _Leverage: ruff, black, mypy_
+  - _Requirements: Non-functional requirement: Code quality_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in code quality and tooling | Task: Set up and configure code quality tools (ruff, black, mypy), fix all linting and type errors across codebase | Restrictions: Follow PEP 8, maintain consistent style, ensure type safety | Leverage: ruff, black, mypy, pre-commit hooks | Requirements: Code quality | Success: All linting passes, code formatted consistently, type checking passes, pre-commit hooks configured | Instructions: Mark [-], configure tools, run linters, fix issues, log with artifacts (config files, linting results), mark [x]_
+
+- [ ] 8.7. Final documentation review and completion
+  - Files: `README.md`, `docs/`, all docstrings
+  - Review all documentation for completeness and accuracy
+  - Add architecture diagrams and examples
+  - Create developer guide for extending the pipeline
+  - _Leverage: Existing documentation from task 7.8_
+  - _Requirements: Non-functional requirement: Usability_
+  - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Technical Writer with expertise in software documentation | Task: Review and complete all documentation including README, user guide, developer guide, and API docs | Restrictions: Ensure accuracy, provide clear examples, cover all major features and extension points | Leverage: Existing docs, code examples, architecture diagrams | Requirements: Usability | Success: Documentation is complete and accurate, examples work, developer guide enables extensions, API docs comprehensive | Instructions: Mark [-], review all docs, add missing content, test examples, log with artifacts (documentation files updated/created), mark [x]_
