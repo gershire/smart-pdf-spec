@@ -103,10 +103,7 @@ class BoundingBox(BaseModel):
             ``True`` if the boxes overlap, ``False`` otherwise.
         """
         return (
-            self.x0 < other.x1
-            and other.x0 < self.x1
-            and self.y0 < other.y1
-            and other.y0 < self.y1
+            self.x0 < other.x1 and other.x0 < self.x1 and self.y0 < other.y1 and other.y0 < self.y1
         )
 
     def contains(self, other: "BoundingBox") -> bool:
