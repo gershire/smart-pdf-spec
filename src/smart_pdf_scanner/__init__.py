@@ -1,0 +1,1 @@
+"""Smart PDF Scanner package."""

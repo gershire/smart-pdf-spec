@@ -11,7 +11,7 @@
   - _Requirements: Req 10 (Configuration Management)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python DevOps Engineer specializing in project setup and dependency management | Task: Set up the complete project structure following structure.md, configure Poetry with all required dependencies from tech.md, and create base configuration files following requirement 10 | Restrictions: Use exact dependency versions from tech.md, follow Python packaging best practices, ensure cross-platform compatibility | Leverage: Poetry for dependency management, structure.md for directory layout, tech.md for technology choices | Requirements: Req 10 | Success: Project structure matches structure.md exactly, all dependencies install without conflicts, configuration loads successfully | Instructions: Mark this task as in-progress [-] in tasks.md before starting, implement the code, test it works, then use log-implementation tool to record what was implemented with detailed artifacts (files created, dependencies added), and finally mark as complete [x] in tasks.md_
 
-- [ ] 1.2. Implement core data models (BoundingBox, Element base)
+- [x] 1.2. Implement core data models (BoundingBox, Element base)
   - Files: `src/smart_pdf_scanner/models/elements.py`, `src/smart_pdf_scanner/models/__init__.py`
   - Create Pydantic models for BoundingBox, ElementType enum, Element base class
   - Add bbox utility methods (area, intersects, contains)
