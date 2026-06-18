@@ -1,0 +1,89 @@
+[tool.poetry]
+name = "smart-pdf-scanner"
+version = "0.1.0"
+description = "Intelligent PDF to Markdown converter with structural fidelity"
+authors = ["Smart PDF Scanner Team"]
+readme = "README.md"
+packages = [{include = "smart_pdf_scanner", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+# PDF Processing
+PyMuPDF = ">=1.23.0"
+pdfplumber = ">=0.10.0"
+pdf2image = ">=1.16.0"
+
+# OCR
+pytesseract = ">=0.3.10"
+easyocr = ">=1.7.0"
+
+# Layout Analysis
+layoutparser = ">=0.3.4"
+# detectron2 = ">=0.6"  # Commented out - requires special installation
+
+# Image Processing
+Pillow = ">=10.0.0"
+opencv-python = ">=4.8.0"
+
+# LLM Integration
+openai = ">=1.0.0"
+anthropic = ">=0.18.0"
+
+# Data Models & Validation
+pydantic = ">=2.0.0"
+
+# Configuration
+pyyaml = ">=6.0"
+python-dotenv = ">=1.0.0"
+
+# Utilities
+numpy = ">=1.24.0"
+
+[tool.poetry.group.desktop.dependencies]
+PyQt6 = ">=6.5.0"
+
+[tool.poetry.group.api.dependencies]
+fastapi = ">=0.109.0"
+uvicorn = ">=0.27.0"
+
+[tool.poetry.group.cli.dependencies]
+click = ">=8.1.0"
+rich = ">=13.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.4.0"
+pytest-cov = ">=4.1.0"
+pytest-mock = ">=3.12.0"
+black = ">=23.0.0"
+ruff = ">=0.1.0"
+mypy = ">=1.7.0"
+
+[tool.poetry.scripts]
+smart-pdf = "smart_pdf_scanner.cli.main:cli"
+smart-pdf-desktop = "smart_pdf_scanner.desktop.main:main"
+smart-pdf-api = "smart_pdf_scanner.api.main:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=smart_pdf_scanner --cov-report=html --cov-report=term"
