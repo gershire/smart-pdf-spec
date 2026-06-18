@@ -1,0 +1,83 @@
+# Smart PDF Scanner - Default Configuration
+
+# General Settings
+processing:
+  mode: balanced  # fast, balanced, high_fidelity
+  max_file_size_mb: 150
+  parallel_pages: false
+  max_workers: 4
+
+# Processing Stages (enabled by default)
+stages:
+  enabled:
+    - pdf_parser
+    - layout_analyzer
+    - ocr_processor
+    - structure_recognizer
+    - table_processor
+    - image_processor
+    - semantic_enhancer
+    - markdown_generator
+
+# OCR Configuration
+ocr:
+  engine: tesseract  # tesseract, easyocr, cloud_ocr
+  fallback_engine: easyocr
+  languages:
+    - eng
+  confidence_threshold: 0.7
+  preprocess: true
+
+# Layout Analysis Configuration
+layout:
+  engine: layoutparser  # layoutparser, doctr, heuristic
+  model: "lp://PubLayNet/faster_rcnn_R_50_FPN_3x/config"
+  confidence_threshold: 0.7
+
+# Table Processing Configuration
+table:
+  simple_engine: pdfplumber
+  complex_engine: table-transformer
+  export_csv: false
+
+# LLM Configuration (optional)
+llm:
+  provider: null  # openai, anthropic, local, null
+  model: gpt-4-turbo
+  max_tokens: 4096
+  temperature: 0.1
+  vision_model: gpt-4-vision-preview
+
+# Output Configuration
+output:
+  format: markdown
+  include_page_numbers: true
+  include_metadata: true
+  assets_folder: assets
+
+# Caching Configuration
+cache:
+  enabled: true
+  directory: .cache/smart-pdf-scanner
+  ttl_hours: 168  # 7 days
+  max_size_mb: 1000
+
+# Logging Configuration
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  format: json  # json, text
+  file: null  # null for stdout only, or path to log file
+  
+# Visualization Configuration
+visualization:
+  enabled: false
+  colors:
+    text_block: "#3498db"  # blue
+    heading: "#e74c3c"     # red
+    table: "#2ecc71"       # green
+    image: "#9b59b6"       # purple
+    caption: "#f39c12"     # orange
+    footnote: "#95a5a6"    # gray
+    sidebar: "#1abc9c"     # turquoise
+  transparency: 0.3
+  export_format: png

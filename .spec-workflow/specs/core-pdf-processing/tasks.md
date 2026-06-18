@@ -2,7 +2,7 @@
 
 ## Phase 1: Foundation & Data Models
 
-- [ ] 1.1. Create project structure and base configuration
+- [x] 1.1. Create project structure and base configuration
   - Files: `pyproject.toml`, `src/smart_pdf_scanner/__init__.py`, `config/default.yaml`
   - Set up Poetry project with dependencies (PyMuPDF, pdfplumber, pydantic, etc.)
   - Create directory structure following structure.md
