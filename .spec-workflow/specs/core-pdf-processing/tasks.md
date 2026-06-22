@@ -27,7 +27,7 @@
   - _Requirements: Req 2 (PDF Parsing), Req 6 (Table Processing), Req 7 (Image Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer specializing in object-oriented design and data structures | Task: Implement element subclasses (TextBlock, Heading, Table, Image) extending the Element base class, plus supporting models (FontInfo, TableRow, ImageType) following design document specifications | Restrictions: Must properly inherit from Element, maintain Pydantic validation, follow design model structures exactly | Leverage: Element base class, Pydantic inheritance patterns | Requirements: Req 2, 6, 7 | Success: All element types properly inherit and validate, specific fields are correctly typed, models support all required operations | Instructions: Mark [-], extend Element class for each type, add specific fields per design, test validation, log with artifacts (classes: TextBlock, Heading, Table, Image with their fields), mark [x]_
 
-- [ ] 1.4. Implement Page and Document models
+- [x] 1.4. Implement Page and Document models
   - Files: `src/smart_pdf_scanner/models/page.py`, `src/smart_pdf_scanner/models/document.py`
   - Create Page model with elements list and dimensions
   - Create Document model with pages, metadata, structure
@@ -36,7 +36,7 @@
   - _Requirements: Req 1 (Pipeline Orchestration), Design: Document Model, Page Model_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in data modeling and collections | Task: Implement Page and Document models following design specifications, including helper methods for element management and page access per requirement 1 | Restrictions: Use Pydantic, implement all methods from design, ensure efficient element access | Leverage: Element models, Pydantic Field with default_factory | Requirements: Req 1 | Success: Documents can manage pages and elements efficiently, helper methods work correctly, models validate properly | Instructions: Mark [-], create Page and Document classes with all fields and methods from design, test CRUD operations, log with artifacts (classes: Page, Document with methods: add_page, get_page, get_all_elements), mark [x]_
 
-- [ ] 1.5. Implement structure and metadata models
+- [x] 1.5. Implement structure and metadata models
   - Files: `src/smart_pdf_scanner/models/structure.py`, `src/smart_pdf_scanner/models/metadata.py`
   - Create DocumentStructure, TableOfContents, TOCEntry, Link models
   - Create DocumentMetadata model with PDF metadata fields
@@ -44,7 +44,7 @@
   - _Requirements: Req 5 (Structure Recognition), Design: Structure Models, Metadata Model_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in document structure modeling | Task: Implement structure models (DocumentStructure, TableOfContents, TOCEntry, Link) and DocumentMetadata following design specifications for requirement 5 | Restrictions: Use Pydantic, follow design model structures, ensure proper relationships | Leverage: Heading model, Pydantic Optional and List types | Requirements: Req 5 | Success: Structure models properly represent document hierarchy, metadata captures all PDF fields, models validate correctly | Instructions: Mark [-], create all structure and metadata models per design, test with sample data, log with artifacts (classes: DocumentStructure, TableOfContents, TOCEntry, Link, DocumentMetadata), mark [x]_
 
-- [ ] 1.6. Implement configuration models and manager
+- [x] 1.6. Implement configuration models and manager
   - Files: `src/smart_pdf_scanner/models/config.py`, `src/smart_pdf_scanner/core/config.py`
   - Create Config, OCRConfig, LayoutConfig, LLMConfig Pydantic models
   - Implement ConfigManager with load, validate, get_preset methods
@@ -53,7 +53,7 @@
   - _Requirements: Req 10 (Configuration Management), Design: Configuration Model, Configuration Manager_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in configuration management and validation | Task: Implement configuration models and ConfigManager with hierarchical loading (defaults → file → env → CLI) following requirement 10 and design specifications | Restrictions: Use Pydantic for validation, support YAML files, handle missing configs gracefully | Leverage: Pydantic BaseModel, PyYAML, python-dotenv, pathlib | Requirements: Req 10 | Success: Configuration loads from multiple sources with correct precedence, validation catches errors, presets work correctly | Instructions: Mark [-], create config models and ConfigManager class, implement load/validate/get_preset methods, test hierarchy, log with artifacts (classes: Config, OCRConfig, LayoutConfig, LLMConfig, ConfigManager with methods), mark [x]_
 
-- [ ] 1.7. Implement ProcessingResult model and utilities
+- [x] 1.7. Implement ProcessingResult model and utilities
   - Files: `src/smart_pdf_scanner/models/result.py`, `src/smart_pdf_scanner/utils/logging.py`
   - Create ProcessingResult and ProcessingStatistics models
   - Set up structured logging with JSON format support
