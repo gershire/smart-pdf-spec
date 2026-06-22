@@ -5,6 +5,11 @@ analysis stage (Requirement 3): the :class:`ElementType` enumeration, the
 :class:`BoundingBox` geometry primitive with its geometric operations, and the
 :class:`Element` base class that all concrete element types extend.
 
+It also defines the concrete element types produced by the parsing, table, and
+image stages (Requirements 2, 6, 7): :class:`TextBlock`, :class:`Heading`,
+:class:`Table`, and :class:`Image`, together with their supporting models
+:class:`FontInfo`, :class:`TableRow`, and :class:`ImageType`.
+
 The models use Pydantic for validation and JSON serialization, ensuring type
 safety across the pipeline.
 """
@@ -12,6 +17,7 @@ safety across the pipeline.
 from __future__ import annotations
 
 from enum import Enum
+from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -183,3 +189,104 @@ class Element(BaseModel):
     bbox: BoundingBox
     page_number: int = Field(ge=0)
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
+
+
+class FontInfo(BaseModel):
+    """Font attributes for a piece of text.
+
+    Attributes:
+        name: Font family name (e.g. ``"Helvetica"``).
+        size: Font size in points.
+        weight: Font weight, ``"normal"`` or ``"bold"``.
+        style: Font style, ``"normal"`` or ``"italic"``.
+    """
+
+    name: str
+    size: float
+    weight: str
+    style: str
+
+
+class TextBlock(Element):
+    """A block of text extracted from a page (Requirement 2).
+
+    Attributes:
+        text: The extracted text content.
+        font_info: Optional font metadata for the block.
+        reading_order: Index of the block within the page reading order.
+        hierarchy_level: Optional logical nesting level of the block.
+    """
+
+    element_type: ElementType = ElementType.TEXT_BLOCK
+    text: str
+    font_info: FontInfo | None = None
+    reading_order: int = 0
+    hierarchy_level: int | None = None
+
+
+class Heading(TextBlock):
+    """A heading element (Requirement 2).
+
+    Attributes:
+        level: Heading level from 1 (H1) to 6 (H6).
+    """
+
+    element_type: ElementType = ElementType.HEADING
+    level: int = Field(ge=1, le=6)
+
+
+class TableRow(BaseModel):
+    """A single row of table cell values.
+
+    Attributes:
+        cells: The ordered cell values for the row.
+    """
+
+    cells: list[str]
+
+
+class Table(Element):
+    """A table element with its extracted content (Requirement 6).
+
+    Attributes:
+        rows: The table rows.
+        headers: Optional header labels for the table columns.
+        markdown: The table rendered as Markdown.
+        csv_path: Optional path to an exported CSV of the table.
+    """
+
+    element_type: ElementType = ElementType.TABLE
+    rows: list[TableRow]
+    headers: list[str] | None = None
+    markdown: str
+    csv_path: Path | None = None
+
+
+class ImageType(str, Enum):
+    """Visual classification of an extracted image (Requirement 7)."""
+
+    PHOTOGRAPH = "photograph"
+    DIAGRAM = "diagram"
+    CHART = "chart"
+    GRAPH = "graph"
+    ILLUSTRATION = "illustration"
+    OTHER = "other"
+
+
+class Image(Element):
+    """An image element extracted from a page (Requirement 7).
+
+    Attributes:
+        image_path: Path to the saved image asset.
+        image_type: The classified :class:`ImageType` of the image.
+        description: Human- or model-generated description of the image.
+        ocr_text: Optional text recognized within the image.
+        caption: Optional caption associated with the image.
+    """
+
+    element_type: ElementType = ElementType.IMAGE
+    image_path: Path
+    image_type: ImageType
+    description: str
+    ocr_text: str | None = None
+    caption: str | None = None

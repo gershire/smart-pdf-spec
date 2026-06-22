@@ -19,7 +19,7 @@
   - _Requirements: Req 3 (Layout Analysis), Design: Element Models_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in data modeling and Pydantic | Task: Create core element data models including BoundingBox with geometric operations, ElementType enum, and Element base class following the design document's Element Models section | Restrictions: Use Pydantic BaseModel, implement all methods from design, ensure type safety | Leverage: Pydantic for validation, design.md Element Models section | Requirements: Req 3 | Success: All models validate correctly, bbox operations work accurately, models serialize to/from JSON | Instructions: Mark task as in-progress [-], implement models with full type hints and validation, test bbox operations, log implementation with artifacts (classes created with methods), mark complete [x]_
 
-- [ ] 1.3. Implement element subclasses (TextBlock, Heading, Table, Image)
+- [x] 1.3. Implement element subclasses (TextBlock, Heading, Table, Image)
   - Files: `src/smart_pdf_scanner/models/elements.py` (continue from 1.2)
   - Create TextBlock, Heading, Table, Image classes extending Element
   - Add FontInfo, TableRow, ImageType models
