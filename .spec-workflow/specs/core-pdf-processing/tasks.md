@@ -63,7 +63,7 @@
 
 ## Phase 2: Utility Modules
 
-- [ ] 2.1. Implement bounding box utilities
+- [x] 2.1. Implement bounding box utilities
   - Files: `src/smart_pdf_scanner/utils/bbox.py`
   - Create functions for bbox operations: intersection, union, contains, overlap_area
   - Add spatial analysis helpers for reading order determination
