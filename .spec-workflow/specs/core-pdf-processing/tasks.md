@@ -328,7 +328,7 @@
   - _Requirements: All model-related requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in Python unit testing and pytest | Task: Create comprehensive unit tests for all data models covering validation, serialization, and helper methods | Restrictions: Test both valid and invalid inputs, ensure good coverage, use pytest fixtures | Leverage: pytest, Pydantic models, pytest fixtures | Requirements: All model requirements | Success: All models tested thoroughly, validation edge cases covered, serialization works correctly, tests pass consistently | Instructions: Mark [-], write unit tests for all models, achieve >90% coverage, log with artifacts (test files created, test functions for each model class), mark [x]_
 
-- [ ] 7.2. Create unit tests for utilities
+- [x] 7.2. Create unit tests for utilities
   - Files: `tests/unit/test_utils/test_bbox.py`, `tests/unit/test_utils/test_image_utils.py`, `tests/unit/test_utils/test_text_utils.py`, `tests/unit/test_utils/test_cache.py`
   - Test bbox operations, image processing, text utilities, caching
   - _Leverage: pytest, utility modules from Phase 2_
