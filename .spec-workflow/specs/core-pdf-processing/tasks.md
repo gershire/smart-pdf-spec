@@ -98,7 +98,7 @@
 
 ## Phase 3: Engine Interfaces & Implementations
 
-- [ ] 3.1. Create OCR engine base interface
+- [x] 3.1. Create OCR engine base interface
   - Files: `src/smart_pdf_scanner/engines/ocr/base.py`, `src/smart_pdf_scanner/engines/ocr/__init__.py`
   - Define OCREngine abstract base class with extract_text, get_confidence methods
   - Create OCRResult model
@@ -106,7 +106,7 @@
   - _Requirements: Req 4 (OCR Processing), Design: OCREngine Interface_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in interface design and abstraction | Task: Define OCREngine abstract base class and OCRResult model following design specifications for requirement 4 | Restrictions: Use ABC for interface, define clear contracts, ensure extensibility | Leverage: Python abc.ABC, abstractmethod, Pydantic BaseModel | Requirements: Req 4 | Success: Interface defines clear contract, OCRResult captures all needed data, implementations can extend easily | Instructions: Mark [-], create OCREngine ABC with abstract methods, create OCRResult model, log with artifacts (classes: OCREngine interface, OCRResult model), mark [x]_
 
-- [ ] 3.2. Implement Tesseract OCR engine
+- [x] 3.2. Implement Tesseract OCR engine
   - Files: `src/smart_pdf_scanner/engines/ocr/tesseract.py`
   - Implement TesseractEngine extending OCREngine
   - Add language configuration and confidence extraction
