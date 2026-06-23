@@ -7,7 +7,17 @@ import pytest
 from pydantic import ValidationError
 
 from smart_pdf_scanner.models.document import Document
-from smart_pdf_scanner.models.elements import BoundingBox, ElementType, TextBlock
+from smart_pdf_scanner.models.elements import (
+    BoundingBox,
+    Element,
+    ElementType,
+    Heading,
+    Image,
+    ImageType,
+    Table,
+    TableRow,
+    TextBlock,
+)
 from smart_pdf_scanner.models.metadata import DocumentMetadata
 from smart_pdf_scanner.models.page import Page, PageDimensions
 
@@ -94,3 +104,60 @@ def test_document_json_round_trip() -> None:
     element = restored.get_all_elements()[0]
     assert element.element_id == "a"
     assert element.element_type == ElementType.TEXT_BLOCK
+    # Subclass identity and fields must survive the round trip, not downcast
+    # to the bare Element base (which would silently drop ``text``).
+    assert isinstance(element, TextBlock)
+    assert element.text == "hello"
+
+
+def test_page_mixed_element_round_trip_preserves_subtypes() -> None:
+    """Every concrete element subtype survives a serialization round trip.
+
+    The page element field is a discriminated union, so each element is
+    reconstructed as its concrete class (with its subclass-specific fields)
+    rather than collapsing to the ``Element`` base. Element types without a
+    dedicated subclass (e.g. caption) fall back to ``Element``.
+    """
+    page = Page(page_number=0, dimensions=PageDimensions(width=612, height=792))
+    page.add_element(TextBlock(element_id="t1", bbox=_bbox(), page_number=0, text="body"))
+    page.add_element(
+        Heading(element_id="h1", bbox=_bbox(), page_number=0, text="Title", level=2)
+    )
+    page.add_element(
+        Table(
+            element_id="tb1",
+            bbox=_bbox(),
+            page_number=0,
+            rows=[TableRow(cells=["a", "b"])],
+            markdown="|a|b|",
+        )
+    )
+    page.add_element(
+        Image(
+            element_id="i1",
+            bbox=_bbox(),
+            page_number=0,
+            image_path=Path("img.png"),
+            image_type=ImageType.CHART,
+            description="chart",
+        )
+    )
+    page.add_element(
+        Element(
+            element_id="c1",
+            element_type=ElementType.CAPTION,
+            bbox=_bbox(),
+            page_number=0,
+        )
+    )
+
+    restored = Page.model_validate(json.loads(page.model_dump_json()))
+    text, heading, table, image, caption = restored.elements
+
+    assert isinstance(text, TextBlock) and text.text == "body"
+    assert isinstance(heading, Heading) and heading.level == 2
+    assert isinstance(table, Table) and table.rows[0].cells == ["a", "b"]
+    assert isinstance(image, Image) and image.image_type == ImageType.CHART
+    # Subclass-less types fall back to the Element base.
+    assert type(caption) is Element
+    assert caption.element_type == ElementType.CAPTION

@@ -9,6 +9,7 @@ from smart_pdf_scanner.models.config import (
 )
 from smart_pdf_scanner.models.document import Document
 from smart_pdf_scanner.models.elements import (
+    AnyElement,
     BoundingBox,
     Element,
     ElementType,
@@ -32,6 +33,7 @@ from smart_pdf_scanner.models.structure import (
 )
 
 __all__ = [
+    "AnyElement",
     "BoundingBox",
     "Config",
     "Document",
