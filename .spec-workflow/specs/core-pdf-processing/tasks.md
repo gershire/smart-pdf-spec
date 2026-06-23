@@ -71,7 +71,7 @@
   - _Requirements: Req 3 (Layout Analysis), Req 5 (Structure Recognition)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in computational geometry | Task: Implement bounding box utility functions for geometric operations (intersection, union, contains, overlap) and spatial analysis for requirements 3 and 5 | Restrictions: Use pure Python, ensure numerical accuracy, handle edge cases | Leverage: BoundingBox model, type hints | Requirements: Req 3, 5 | Success: All bbox operations work correctly, spatial analysis helpers determine reading order accurately, edge cases handled | Instructions: Mark [-], implement bbox utility functions, add comprehensive tests, log with artifacts (functions: intersection, union, contains, overlap_area, spatial analysis helpers), mark [x]_
 
-- [ ] 2.2. Implement image processing utilities
+- [x] 2.2. Implement image processing utilities
   - Files: `src/smart_pdf_scanner/utils/image_utils.py`
   - Create functions for image preprocessing: deskew, denoise, contrast enhancement
   - Add image format conversion and saving utilities
@@ -79,7 +79,7 @@
   - _Requirements: Req 4 (OCR Processing), Req 7 (Image Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image processing and OpenCV | Task: Implement image preprocessing utilities (deskew, denoise, contrast enhancement) and format conversion for requirements 4 and 7 | Restrictions: Use Pillow and OpenCV, ensure quality preservation, handle various image formats | Leverage: Pillow (PIL), OpenCV (cv2), numpy | Requirements: Req 4, 7 | Success: Preprocessing improves OCR accuracy, format conversion works for all supported types, images save correctly | Instructions: Mark [-], implement preprocessing functions, test with sample images, log with artifacts (functions: deskew, denoise, enhance_contrast, convert_format, save_image), mark [x]_
 
-- [ ] 2.3. Implement text processing utilities
+- [x] 2.3. Implement text processing utilities
   - Files: `src/smart_pdf_scanner/utils/text_utils.py`
   - Create functions for text cleaning, normalization, similarity matching
   - Add reading order determination helpers
@@ -87,7 +87,7 @@
   - _Requirements: Req 5 (Structure Recognition)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in text processing and NLP | Task: Implement text utility functions for cleaning, normalization, similarity matching, and reading order determination for requirement 5 | Restrictions: Use standard library where possible, ensure Unicode handling, optimize for performance | Leverage: Python string methods, re module, difflib | Requirements: Req 5 | Success: Text cleaning handles edge cases, similarity matching works accurately, reading order helpers support structure recognition | Instructions: Mark [-], implement text utility functions, test with various text samples, log with artifacts (functions: clean_text, normalize, similarity_score, determine_reading_order), mark [x]_
 
-- [ ] 2.4. Implement caching utilities
+- [x] 2.4. Implement caching utilities
   - Files: `src/smart_pdf_scanner/utils/cache.py`
   - Create file-based cache for OCR results and layout detections
   - Add cache key generation based on content hash
@@ -328,7 +328,7 @@
   - _Requirements: All model-related requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in Python unit testing and pytest | Task: Create comprehensive unit tests for all data models covering validation, serialization, and helper methods | Restrictions: Test both valid and invalid inputs, ensure good coverage, use pytest fixtures | Leverage: pytest, Pydantic models, pytest fixtures | Requirements: All model requirements | Success: All models tested thoroughly, validation edge cases covered, serialization works correctly, tests pass consistently | Instructions: Mark [-], write unit tests for all models, achieve >90% coverage, log with artifacts (test files created, test functions for each model class), mark [x]_
 
-- [ ] 7.2. Create unit tests for utilities
+- [x] 7.2. Create unit tests for utilities
   - Files: `tests/unit/test_utils/test_bbox.py`, `tests/unit/test_utils/test_image_utils.py`, `tests/unit/test_utils/test_text_utils.py`, `tests/unit/test_utils/test_cache.py`
   - Test bbox operations, image processing, text utilities, caching
   - _Leverage: pytest, utility modules from Phase 2_
