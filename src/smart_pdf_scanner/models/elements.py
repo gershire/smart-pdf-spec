@@ -18,8 +18,9 @@ from __future__ import annotations
 
 from enum import Enum
 from pathlib import Path
+from typing import Annotated, Any, Union
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Discriminator, Field, Tag, model_validator
 
 
 class ElementType(str, Enum):
@@ -290,3 +291,56 @@ class Image(Element):
     description: str
     ocr_text: str | None = None
     caption: str | None = None
+
+
+# Maps an ``ElementType`` value to the discriminated-union tag of the concrete
+# class that models it. Element types without a dedicated subclass
+# (caption, footnote, sidebar) fall back to the :class:`Element` base.
+_ELEMENT_TAG_BY_TYPE: dict[str, str] = {
+    ElementType.TEXT_BLOCK.value: "text_block",
+    ElementType.HEADING.value: "heading",
+    ElementType.TABLE.value: "table",
+    ElementType.IMAGE.value: "image",
+}
+
+
+def _element_discriminator(value: Any) -> str:
+    """Select the union tag for an element from its ``element_type``.
+
+    Works for both model instances (validation of Python objects) and raw
+    mappings (validation of JSON), routing each element to its concrete class
+    so subclass fields survive a serialization round trip. Unknown or
+    subclass-less element types fall back to the :class:`Element` base.
+
+    Args:
+        value: An :class:`Element` instance or a mapping with an
+            ``element_type`` key.
+
+    Returns:
+        The discriminated-union tag identifying the concrete element class.
+    """
+    if isinstance(value, Element):
+        element_type: Any = value.element_type
+    elif isinstance(value, dict):
+        element_type = value.get("element_type")
+    else:
+        element_type = None
+    if isinstance(element_type, ElementType):
+        element_type = element_type.value
+    return _ELEMENT_TAG_BY_TYPE.get(element_type, "element")
+
+
+# Discriminated union over every concrete element type. Using it (instead of the
+# bare :class:`Element` base) as the element field type preserves each subclass's
+# fields through ``model_dump``/``model_validate`` and reconstructs the correct
+# subclass on load. See :class:`smart_pdf_scanner.models.page.Page`.
+AnyElement = Annotated[
+    Union[
+        Annotated[TextBlock, Tag("text_block")],
+        Annotated[Heading, Tag("heading")],
+        Annotated[Table, Tag("table")],
+        Annotated[Image, Tag("image")],
+        Annotated[Element, Tag("element")],
+    ],
+    Discriminator(_element_discriminator),
+]

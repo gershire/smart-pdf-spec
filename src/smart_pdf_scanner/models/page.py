@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from smart_pdf_scanner.models.elements import Element, ElementType
+from smart_pdf_scanner.models.elements import AnyElement, Element, ElementType
 
 
 class PageDimensions(BaseModel):
@@ -37,7 +37,7 @@ class Page(BaseModel):
     """
 
     page_number: int = Field(ge=0)
-    elements: list[Element] = Field(default_factory=list)
+    elements: list[AnyElement] = Field(default_factory=list)
     dimensions: PageDimensions
     is_image_based: bool = False
     ocr_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
