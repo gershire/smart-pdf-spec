@@ -3,11 +3,15 @@
 __version__ = "0.1.0"
 __author__ = "Smart PDF Scanner Team"
 
-# Re-exported once their implementing tasks land:
+from smart_pdf_scanner.models.config import Config, ProcessingMode
+from smart_pdf_scanner.models.document import Document
+
+# Re-exported once its implementing task lands:
 #   from smart_pdf_scanner.core.pipeline import Pipeline
-#   from smart_pdf_scanner.models.document import Document
-#   from smart_pdf_scanner.models.config import Config, ProcessingMode
 
 __all__ = [
+    "Config",
+    "Document",
+    "ProcessingMode",
     "__version__",
 ]
