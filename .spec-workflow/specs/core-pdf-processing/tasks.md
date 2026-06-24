@@ -114,7 +114,7 @@
   - _Requirements: Req 4 (OCR Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and Tesseract integration | Task: Implement TesseractEngine class extending OCREngine interface, with language support and confidence extraction for requirement 4 | Restrictions: Must implement all abstract methods, handle Tesseract errors gracefully, support multiple languages | Leverage: pytesseract, OCREngine interface, image preprocessing utilities | Requirements: Req 4 | Success: Tesseract OCR works correctly, confidence scores extracted, multiple languages supported, errors handled | Instructions: Mark [-], implement TesseractEngine class, test with sample images, log with artifacts (classes: TesseractEngine with methods: extract_text, get_confidence), mark [x]_
 
-- [ ] 3.3. Implement EasyOCR engine (fallback)
+- [x] 3.3. Implement EasyOCR engine (fallback)
   - Files: `src/smart_pdf_scanner/engines/ocr/easyocr.py`
   - Implement EasyOCREngine extending OCREngine
   - Configure as fallback for low-confidence Tesseract results
@@ -122,14 +122,14 @@
   - _Requirements: Req 4 (OCR Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and EasyOCR library | Task: Implement EasyOCREngine as fallback OCR engine extending OCREngine interface for requirement 4 | Restrictions: Must implement interface, handle initialization properly, support GPU and CPU modes | Leverage: easyocr library, OCREngine interface | Requirements: Req 4 | Success: EasyOCR works as fallback, handles handwriting better than Tesseract, GPU/CPU modes work | Instructions: Mark [-], implement EasyOCREngine class, test fallback behavior, log with artifacts (classes: EasyOCREngine with methods), mark [x]_
 
-- [ ] 3.4. Create layout engine base interface
+- [x] 3.4. Create layout engine base interface
   - Files: `src/smart_pdf_scanner/engines/layout/base.py`, `src/smart_pdf_scanner/engines/layout/__init__.py`
   - Define LayoutEngine abstract base class with detect_layout, get_confidence methods
   - _Leverage: Python ABC module_
   - _Requirements: Req 3 (Layout Analysis), Design: LayoutEngine Interface_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in plugin architectures | Task: Define LayoutEngine abstract base class following design specifications for requirement 3 | Restrictions: Use ABC, define clear interface contract, ensure extensibility for multiple implementations | Leverage: Python abc.ABC, abstractmethod, Element models | Requirements: Req 3 | Success: Interface defines clear contract for layout detection, supports multiple implementations, type-safe | Instructions: Mark [-], create LayoutEngine ABC, log with artifacts (classes: LayoutEngine interface with abstract methods), mark [x]_
 
-- [ ] 3.5. Implement LayoutParser engine
+- [x] 3.5. Implement LayoutParser engine
   - Files: `src/smart_pdf_scanner/engines/layout/layoutparser.py`
   - Implement LayoutParserEngine extending LayoutEngine
   - Configure Detectron2 model for layout detection
@@ -138,7 +138,7 @@
   - _Requirements: Req 3 (Layout Analysis)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in computer vision and LayoutParser | Task: Implement LayoutParserEngine using Detectron2 for layout detection, extending LayoutEngine interface for requirement 3 | Restrictions: Must implement interface, handle model loading efficiently, map detections to Element types correctly | Leverage: layoutparser, detectron2, LayoutEngine interface, Element models | Requirements: Req 3 | Success: Layout detection works accurately, elements classified correctly, confidence scores provided, model loads efficiently | Instructions: Mark [-], implement LayoutParserEngine class, test with sample pages, log with artifacts (classes: LayoutParserEngine with methods: detect_layout, get_confidence), mark [x]_
 
-- [ ] 3.6. Implement heuristic layout engine (fallback)
+- [x] 3.6. Implement heuristic layout engine (fallback)
   - Files: `src/smart_pdf_scanner/engines/layout/heuristic.py`
   - Implement HeuristicEngine using text positioning and spacing
   - Use as fallback when LayoutParser fails or confidence is low
@@ -146,14 +146,14 @@
   - _Requirements: Req 3 (Layout Analysis)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in heuristic algorithms and spatial analysis | Task: Implement HeuristicEngine using rule-based layout detection as fallback, extending LayoutEngine interface for requirement 3 | Restrictions: Must implement interface, use only text positioning data, handle edge cases | Leverage: LayoutEngine interface, bbox utilities, text positioning | Requirements: Req 3 | Success: Heuristic detection works for simple layouts, provides reasonable fallback, handles various page structures | Instructions: Mark [-], implement HeuristicEngine with rule-based detection, test with various layouts, log with artifacts (classes: HeuristicEngine with detection logic), mark [x]_
 
-- [ ] 3.7. Create LLM provider base interface
+- [x] 3.7. Create LLM provider base interface
   - Files: `src/smart_pdf_scanner/engines/llm/base.py`, `src/smart_pdf_scanner/engines/llm/__init__.py`
   - Define LLMProvider abstract base class with generate_text, generate_with_vision methods
   - _Leverage: Python ABC module_
   - _Requirements: Req 8 (Semantic Enhancement), Design: LLMProvider Interface_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in AI/ML integration patterns | Task: Define LLMProvider abstract base class for text and vision generation following design specifications for requirement 8 | Restrictions: Use ABC, support both text and vision models, ensure provider-agnostic interface | Leverage: Python abc.ABC, abstractmethod | Requirements: Req 8 | Success: Interface supports text and vision generation, provider-agnostic, extensible for multiple LLM providers | Instructions: Mark [-], create LLMProvider ABC with abstract methods, log with artifacts (classes: LLMProvider interface), mark [x]_
 
-- [ ] 3.8. Implement OpenAI provider
+- [x] 3.8. Implement OpenAI provider
   - Files: `src/smart_pdf_scanner/engines/llm/openai.py`
   - Implement OpenAIProvider extending LLMProvider
   - Support GPT-4 and GPT-4V for text and vision
@@ -162,7 +162,7 @@
   - _Requirements: Req 8 (Semantic Enhancement)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OpenAI API integration | Task: Implement OpenAIProvider with GPT-4 and GPT-4V support, extending LLMProvider interface for requirement 8 | Restrictions: Must implement interface, handle API errors with retry, track token usage, support vision models | Leverage: openai library, LLMProvider interface, python-dotenv for API keys | Requirements: Req 8 | Success: OpenAI integration works for text and vision, token tracking accurate, errors handled gracefully | Instructions: Mark [-], implement OpenAIProvider class, test with API, log with artifacts (classes: OpenAIProvider with methods: generate_text, generate_with_vision, estimate_tokens), mark [x]_
 
-- [ ] 3.9. Implement Anthropic provider
+- [x] 3.9. Implement Anthropic provider
   - Files: `src/smart_pdf_scanner/engines/llm/anthropic.py`
   - Implement AnthropicProvider extending LLMProvider
   - Support Claude models for text and vision
