@@ -172,7 +172,7 @@
 
 ## Phase 4: Processing Stages
 
-- [ ] 4.1. Create ProcessingStage base interface
+- [x] 4.1. Create ProcessingStage base interface
   - Files: `src/smart_pdf_scanner/stages/base.py`, `src/smart_pdf_scanner/stages/__init__.py`
   - Define ProcessingStage abstract base class with process, validate methods
   - Create ValidationWarning model
@@ -180,7 +180,7 @@
   - _Requirements: Req 1 (Pipeline Orchestration), Design: ProcessingStage Interface_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Architect specializing in pipeline architectures | Task: Define ProcessingStage abstract base class and ValidationWarning model following design specifications for requirement 1 | Restrictions: Use ABC, define clear stage contract, ensure all stages follow same pattern | Leverage: Python abc.ABC, abstractmethod, Pydantic | Requirements: Req 1 | Success: Interface defines clear stage contract, ValidationWarning captures issues, stages can be chained | Instructions: Mark [-], create ProcessingStage ABC and ValidationWarning model, log with artifacts (classes: ProcessingStage interface, ValidationWarning), mark [x]_
 
-- [ ] 4.2. Implement PDFParser stage
+- [x] 4.2. Implement PDFParser stage
   - Files: `src/smart_pdf_scanner/stages/pdf_parser.py`
   - Implement PDFParser extending ProcessingStage
   - Extract text with positions, images, metadata using PyMuPDF
@@ -189,7 +189,7 @@
   - _Requirements: Req 2 (PDF Parsing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in PDF processing and PyMuPDF | Task: Implement PDFParser stage to extract text, images, and metadata from PDFs using PyMuPDF, following requirement 2 and design specifications | Restrictions: Must implement ProcessingStage interface, handle various PDF types, extract positioning data | Leverage: PyMuPDF (fitz), ProcessingStage interface, Document/Page/Element models, image utilities | Requirements: Req 2 | Success: Text extracted with accurate positions, images saved to assets, metadata captured, Page objects created correctly | Instructions: Mark [-], implement PDFParser class with extract methods, test with various PDFs, log with artifacts (classes: PDFParser with methods: process, extract_text_with_positions, extract_images, extract_metadata), mark [x]_
 
-- [ ] 4.3. Implement LayoutAnalyzer stage
+- [x] 4.3. Implement LayoutAnalyzer stage
   - Files: `src/smart_pdf_scanner/stages/layout_analyzer.py`
   - Implement LayoutAnalyzer extending ProcessingStage
   - Use pluggable layout engine to detect elements
@@ -198,7 +198,7 @@
   - _Requirements: Req 3 (Layout Analysis)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in layout analysis and computer vision | Task: Implement LayoutAnalyzer stage using pluggable layout engines to detect and classify document elements, following requirement 3 | Restrictions: Must implement ProcessingStage, support engine switching, handle low confidence with fallback | Leverage: ProcessingStage interface, LayoutEngine interface, bbox utilities, Element models | Requirements: Req 3 | Success: Elements detected and classified accurately, columns identified, fallback works when needed, confidence scores tracked | Instructions: Mark [-], implement LayoutAnalyzer with engine integration, test with multi-column PDFs, log with artifacts (classes: LayoutAnalyzer with methods: process, detect_elements, classify_element, detect_columns), mark [x]_
 
-- [ ] 4.4. Implement OCRProcessor stage
+- [x] 4.4. Implement OCRProcessor stage
   - Files: `src/smart_pdf_scanner/stages/ocr_processor.py`
   - Implement OCRProcessor extending ProcessingStage
   - Use pluggable OCR engines with fallback mechanism
@@ -208,7 +208,7 @@
   - _Requirements: Req 4 (OCR Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in OCR and image preprocessing | Task: Implement OCRProcessor stage with pluggable OCR engines, fallback mechanism, and image preprocessing following requirement 4 | Restrictions: Must implement ProcessingStage, support primary and fallback engines, preprocess images | Leverage: ProcessingStage interface, OCREngine interface, image preprocessing utilities | Requirements: Req 4 | Success: OCR works on scanned pages, fallback activates on low confidence, preprocessing improves accuracy, text within images extracted | Instructions: Mark [-], implement OCRProcessor with engine fallback, test with scanned PDFs, log with artifacts (classes: OCRProcessor with methods: process, ocr_page, ocr_image, preprocess_image), mark [x]_
 
-- [ ] 4.5. Implement StructureRecognizer stage
+- [x] 4.5. Implement StructureRecognizer stage
   - Files: `src/smart_pdf_scanner/stages/structure_recognizer.py`
   - Implement StructureRecognizer extending ProcessingStage
   - Identify headings based on font size and weight
@@ -219,7 +219,7 @@
   - _Requirements: Req 5 (Structure Recognition)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in document structure analysis and NLP | Task: Implement StructureRecognizer stage to identify headings, build hierarchy, determine reading order, and link TOC following requirement 5 | Restrictions: Must implement ProcessingStage, use font analysis for headings, spatial analysis for reading order | Leverage: ProcessingStage interface, text utilities, bbox utilities, DocumentStructure model | Requirements: Req 5 | Success: Headings identified correctly, hierarchy built accurately, reading order logical, TOC linked to sections | Instructions: Mark [-], implement StructureRecognizer with hierarchy building, test with structured documents, log with artifacts (classes: StructureRecognizer with methods: process, identify_headings, build_hierarchy, determine_reading_order, link_toc), mark [x]_
 
-- [ ] 4.6. Implement TableProcessor stage
+- [x] 4.6. Implement TableProcessor stage
   - Files: `src/smart_pdf_scanner/stages/table_processor.py`
   - Implement TableProcessor extending ProcessingStage
   - Use pdfplumber for simple tables, table-transformer for complex
@@ -229,7 +229,7 @@
   - _Requirements: Req 6 (Table Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in table extraction and data processing | Task: Implement TableProcessor stage using pdfplumber and table-transformer to extract and convert tables following requirement 6 | Restrictions: Must implement ProcessingStage, handle simple and complex tables, generate valid Markdown | Leverage: ProcessingStage interface, pdfplumber, table-transformer, Table model | Requirements: Req 6 | Success: Simple tables extracted with pdfplumber, complex tables with transformer, Markdown conversion accurate, CSV export works | Instructions: Mark [-], implement TableProcessor with dual extraction methods, test with various tables, log with artifacts (classes: TableProcessor with methods: process, extract_table, convert_to_markdown, export_to_csv), mark [x]_
 
-- [ ] 4.7. Implement ImageProcessor stage
+- [x] 4.7. Implement ImageProcessor stage
   - Files: `src/smart_pdf_scanner/stages/image_processor.py`
   - Implement ImageProcessor extending ProcessingStage
   - Classify images by type (photo, diagram, chart, etc.)
@@ -240,7 +240,7 @@
   - _Requirements: Req 7 (Image Processing)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image analysis and classification | Task: Implement ImageProcessor stage to classify images, extract text, and generate descriptions following requirement 7 | Restrictions: Must implement ProcessingStage, support basic and LLM descriptions, handle missing LLM gracefully | Leverage: ProcessingStage interface, OCREngine for text extraction, LLMProvider for descriptions, Image model | Requirements: Req 7 | Success: Images classified correctly, OCR extracts text, descriptions generated (basic or enhanced), captions associated | Instructions: Mark [-], implement ImageProcessor with classification and description, test with various images, log with artifacts (classes: ImageProcessor with methods: process, classify_image, extract_text_from_image, generate_description), mark [x]_
 
-- [ ] 4.8. Implement SemanticEnhancer stage (optional)
+- [x] 4.8. Implement SemanticEnhancer stage (optional)
   - Files: `src/smart_pdf_scanner/stages/semantic_enhancer.py`
   - Implement SemanticEnhancer extending ProcessingStage
   - Use LLM to refine ambiguous heading hierarchies
@@ -250,7 +250,7 @@
   - _Requirements: Req 8 (Semantic Enhancement)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in LLM integration and prompt engineering | Task: Implement SemanticEnhancer stage to use LLM for refining structures and enhancing descriptions following requirement 8 | Restrictions: Must implement ProcessingStage, minimize token usage, handle LLM failures gracefully | Leverage: ProcessingStage interface, LLMProvider interface, caching utilities | Requirements: Req 8 | Success: Ambiguous hierarchies refined, descriptions enhanced with context, token usage minimized, fallback to deterministic results works | Instructions: Mark [-], implement SemanticEnhancer with LLM calls, test enhancement quality, log with artifacts (classes: SemanticEnhancer with methods: process, refine_hierarchy, enhance_descriptions, resolve_ambiguities), mark [x]_
 
-- [ ] 4.9. Implement MarkdownGenerator stage
+- [x] 4.9. Implement MarkdownGenerator stage
   - Files: `src/smart_pdf_scanner/stages/markdown_generator.py`
   - Implement MarkdownGenerator extending ProcessingStage
   - Assemble elements in reading order
