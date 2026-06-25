@@ -263,7 +263,7 @@
 
 ## Phase 5: Pipeline Orchestration
 
-- [ ] 5.1. Implement Pipeline orchestrator
+- [x] 5.1. Implement Pipeline orchestrator
   - Files: `src/smart_pdf_scanner/core/pipeline.py`, `src/smart_pdf_scanner/core/__init__.py`
   - Implement Pipeline class with stage execution
   - Add input validation (file exists, valid PDF, size limits)
@@ -273,7 +273,7 @@
   - _Requirements: Req 1 (Pipeline Orchestration)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Software Engineer specializing in pipeline architectures and orchestration | Task: Implement Pipeline class to orchestrate stage execution with validation, progress tracking, and error handling following requirement 1 | Restrictions: Must execute stages in sequence, handle failures gracefully, emit progress events, validate inputs | Leverage: ProcessingStage interface, Config model, Document model, logging utilities | Requirements: Req 1 | Success: Pipeline executes all stages correctly, validates inputs, emits progress, handles failures with partial processing, returns ProcessingResult | Instructions: Mark [-], implement Pipeline class with orchestration logic, test with sample PDFs, log with artifacts (classes: Pipeline with methods: __init__, process, validate_input, emit_progress), mark [x]_
 
-- [ ] 5.2. Create engine factory classes
+- [x] 5.2. Create engine factory classes
   - Files: `src/smart_pdf_scanner/engines/factories.py`
   - Implement OCREngineFactory, LayoutEngineFactory, LLMProviderFactory
   - Create engines based on configuration
@@ -281,7 +281,7 @@
   - _Requirements: Req 10 (Configuration Management)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in factory patterns and dependency injection | Task: Implement factory classes to create engine instances based on configuration following requirement 10 | Restrictions: Use factory pattern, support all implemented engines, handle missing dependencies | Leverage: Engine interfaces, Config model, importlib for dynamic loading | Requirements: Req 10 | Success: Factories create correct engine instances, configuration drives selection, missing dependencies handled gracefully | Instructions: Mark [-], implement factory classes, test engine creation, log with artifacts (classes: OCREngineFactory, LayoutEngineFactory, LLMProviderFactory with create methods), mark [x]_
 
-- [ ] 5.3. Implement pipeline builder with configuration
+- [x] 5.3. Implement pipeline builder with configuration
   - Files: `src/smart_pdf_scanner/core/pipeline.py` (extend from 5.1)
   - Add PipelineBuilder class to construct pipeline from config
   - Initialize stages with appropriate engines based on config
