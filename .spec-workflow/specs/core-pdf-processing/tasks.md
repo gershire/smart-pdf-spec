@@ -292,7 +292,7 @@
 
 ## Phase 6: Visualization
 
-- [ ] 6.1. Implement page renderer with bounding boxes
+- [x] 6.1. Implement page renderer with bounding boxes
   - Files: `src/smart_pdf_scanner/visualization/renderer.py`, `src/smart_pdf_scanner/visualization/__init__.py`
   - Render PDF pages as images
   - Overlay bounding boxes with transparency
@@ -301,7 +301,7 @@
   - _Requirements: Req 11 (Visualization Support)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in image rendering and visualization | Task: Implement page renderer to visualize detected elements with color-coded bounding boxes following requirement 11 | Restrictions: Use PyMuPDF for page rendering, Pillow for overlay, support transparency control | Leverage: PyMuPDF (fitz), Pillow (PIL), Element models, BoundingBox | Requirements: Req 11 | Success: Pages render correctly, bounding boxes overlay accurately, colors distinguish element types, transparency adjustable | Instructions: Mark [-], implement renderer with bbox overlay, test visualization output, log with artifacts (classes: PageRenderer with methods: render_page, draw_bbox, apply_colors), mark [x]_
 
-- [ ] 6.2. Implement color scheme for element types
+- [x] 6.2. Implement color scheme for element types
   - Files: `src/smart_pdf_scanner/visualization/colors.py`
   - Define color mappings for each ElementType
   - Support custom color schemes
@@ -309,7 +309,7 @@
   - _Requirements: Req 11 (Visualization Support)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in color theory and visualization design | Task: Implement color scheme system for element type visualization following requirement 11 | Restrictions: Use distinct, accessible colors, support customization, provide sensible defaults | Leverage: ElementType enum, Python dictionaries | Requirements: Req 11 | Success: Each element type has distinct color, colors are visually distinguishable, custom schemes supported | Instructions: Mark [-], implement color scheme with mappings, test color distinctiveness, log with artifacts (functions: get_color_scheme, apply_color_to_element), mark [x]_
 
-- [ ] 6.3. Implement visualization export
+- [x] 6.3. Implement visualization export
   - Files: `src/smart_pdf_scanner/visualization/export.py`
   - Export visualization images to files
   - Support multiple pages
