@@ -286,7 +286,7 @@ class Image(Element):
     """
 
     element_type: ElementType = ElementType.IMAGE
-    image_path: Path
+    image_path: Path | None = None
     image_type: ImageType
     description: str
     ocr_text: str | None = None

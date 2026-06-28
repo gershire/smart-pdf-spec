@@ -141,7 +141,7 @@ class OCRProcessor(ProcessingStage):
         for el in page.elements:
             if not isinstance(el, Image):
                 continue
-            file_path: Path | None = getattr(el, "file_path", None)
+            file_path: Path | None = getattr(el, "image_path", None)
             if not file_path or not file_path.exists():
                 continue
             try:

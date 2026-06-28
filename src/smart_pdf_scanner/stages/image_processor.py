@@ -135,7 +135,7 @@ class ImageProcessor(ProcessingStage):
 
     @staticmethod
     def _load_image(element: Image) -> Optional[PILImage.Image]:
-        file_path: Path | None = getattr(element, "file_path", None)
+        file_path: Path | None = getattr(element, "image_path", None)
         if not file_path or not Path(file_path).exists():
             return None
         try:
@@ -155,20 +155,20 @@ class ImageProcessor(ProcessingStage):
         """
         w, h = image.size
         if h == 0:
-            return ImageType.UNKNOWN
+            return ImageType.OTHER
         ratio = w / h
         if ratio >= _WIDE_RATIO:
             return ImageType.CHART
         if ratio <= _TALL_RATIO:
-            return ImageType.PHOTO
+            return ImageType.PHOTOGRAPH
         # Use colour entropy as a rough diagram/photo discriminator
         try:
             import numpy as np
             arr = np.array(image.convert("L"))
             std = float(arr.std())
-            return ImageType.PHOTO if std > 60 else ImageType.DIAGRAM
+            return ImageType.PHOTOGRAPH if std > 60 else ImageType.DIAGRAM
         except Exception:
-            return ImageType.UNKNOWN
+            return ImageType.OTHER
 
     def extract_text_from_image(
         self, image: PILImage.Image, config: OCRConfig
@@ -214,7 +214,7 @@ class ImageProcessor(ProcessingStage):
             Description string.
         """
         ocr_text: str = getattr(element, "ocr_text", "") or ""
-        image_type: ImageType = getattr(element, "image_type", ImageType.UNKNOWN)
+        image_type: ImageType = getattr(element, "image_type", ImageType.OTHER)
 
         if self._llm is not None and llm_cfg is not None:
             context = f"The image appears to be a {image_type.value}."

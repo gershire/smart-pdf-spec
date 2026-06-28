@@ -205,13 +205,19 @@ class PDFParser(ProcessingStage):
                 continue
             font_info: FontInfo | None = None
             if first_span:
+                _is_bold = (
+                    "Bold" in first_span.get("font", "")
+                    or bool(first_span.get("flags", 0) & 2**4)
+                )
+                _is_italic = (
+                    "Italic" in first_span.get("font", "")
+                    or bool(first_span.get("flags", 0) & 2**1)
+                )
                 font_info = FontInfo(
                     name=first_span.get("font", ""),
                     size=float(first_span.get("size", 0)),
-                    is_bold="Bold" in first_span.get("font", "")
-                    or bool(first_span.get("flags", 0) & 2**4),
-                    is_italic="Italic" in first_span.get("font", "")
-                    or bool(first_span.get("flags", 0) & 2**1),
+                    weight="bold" if _is_bold else "normal",
+                    style="italic" if _is_italic else "normal",
                 )
             blocks.append(
                 TextBlock(
@@ -257,8 +263,9 @@ class PDFParser(ProcessingStage):
                     element_type=ElementType.IMAGE,
                     bbox=bbox,
                     page_number=page_idx,
-                    image_type=ImageType.UNKNOWN,
-                    file_path=img_path,
+                    image_type=ImageType.OTHER,
+                    image_path=img_path,
+                    description="",
                 )
             )
         return images
