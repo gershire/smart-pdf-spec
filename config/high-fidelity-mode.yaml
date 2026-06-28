@@ -1,0 +1,52 @@
+# Smart PDF Scanner — High Fidelity Mode Configuration
+# Maximum accuracy using LLM enhancement for image descriptions and
+# semantic analysis. Requires OPENAI_API_KEY or ANTHROPIC_API_KEY.
+# Trade-off: significantly slower and costs API credits.
+
+processing:
+  mode: high_fidelity
+  max_file_size_mb: 150
+  parallel_pages: false
+  max_workers: 2
+
+stages:
+  enabled:
+    - pdf_parser
+    - layout_analyzer
+    - ocr_processor
+    - structure_recognizer
+    - table_processor
+    - image_processor
+    - semantic_enhancer
+    - markdown_generator
+
+ocr:
+  engine: tesseract
+  languages:
+    - eng
+  confidence_threshold: 0.85
+
+layout:
+  engine: layoutparser
+  model: "lp://PubLayNet/faster_rcnn_R_50_FPN_3x/config"
+  confidence_threshold: 0.85
+
+llm:
+  provider: openai         # Set OPENAI_API_KEY or use anthropic + ANTHROPIC_API_KEY
+  model: gpt-4-turbo
+  max_tokens: 4096
+  temperature: 0.1
+
+output:
+  format: markdown
+  include_page_numbers: true
+
+table:
+  export_csv: true
+
+cache:
+  enabled: true
+
+logging:
+  level: INFO
+  format: json

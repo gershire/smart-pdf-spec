@@ -16,8 +16,6 @@ import uuid
 from pathlib import Path
 from typing import List
 
-from pydantic import BaseModel
-
 from smart_pdf_scanner.models.config import Config
 from smart_pdf_scanner.models.document import Document
 from smart_pdf_scanner.models.elements import (
@@ -30,7 +28,7 @@ from smart_pdf_scanner.models.elements import (
 )
 from smart_pdf_scanner.models.metadata import DocumentMetadata
 from smart_pdf_scanner.models.page import Page, PageDimensions
-from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning
+from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning, WarningSeverity
 
 __all__ = ["PDFParser"]
 
@@ -74,7 +72,7 @@ class PDFParser(ProcessingStage):
                 ValidationWarning(
                     code="missing_pdf_path",
                     message="No PDF path provided to PDFParser.",
-                    severity="error",
+                    severity=WarningSeverity.ERROR,
                 )
             )
             return warnings
@@ -83,7 +81,7 @@ class PDFParser(ProcessingStage):
                 ValidationWarning(
                     code="pdf_not_found",
                     message=f"PDF file not found: {path}",
-                    severity="error",
+                    severity=WarningSeverity.ERROR,
                 )
             )
         elif path.stat().st_size > config.max_file_size_mb * 1024 * 1024:
@@ -145,7 +143,6 @@ class PDFParser(ProcessingStage):
 
     @staticmethod
     def _extract_metadata(doc: object, path: Path) -> DocumentMetadata:
-        import fitz
 
         raw: dict = doc.metadata  # type: ignore[union-attr]
         stat = path.stat()
@@ -161,7 +158,6 @@ class PDFParser(ProcessingStage):
         )
 
     def _parse_page(self, fitz_page: object, page_idx: int, assets_folder: Path) -> Page:
-        import fitz
 
         rect = fitz_page.rect  # type: ignore[union-attr]
         dims = PageDimensions(width=rect.width, height=rect.height)
@@ -235,7 +231,6 @@ class PDFParser(ProcessingStage):
         self, fitz_page: object, page_idx: int, assets_folder: Path
     ) -> List[Image]:
         """Extract embedded images from a fitz Page, saving to assets_folder."""
-        import fitz
 
         images: List[Image] = []
         img_list = fitz_page.get_images(full=True)  # type: ignore[union-attr]

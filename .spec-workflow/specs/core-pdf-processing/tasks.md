@@ -388,7 +388,7 @@
 
 ## Phase 8: Configuration Presets & Final Integration
 
-- [ ] 8.1. Create configuration preset files
+- [x] 8.1. Create configuration preset files
   - Files: `config/fast-mode.yaml`, `config/balanced-mode.yaml`, `config/high-fidelity-mode.yaml`
   - Define preset configurations for each processing mode
   - Document mode differences and use cases
@@ -396,7 +396,7 @@
   - _Requirements: Req 10 (Configuration Management)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: DevOps Engineer with expertise in configuration management | Task: Create YAML configuration preset files for fast, balanced, and high-fidelity processing modes following design specifications | Restrictions: Follow YAML syntax, match Config model schema, document mode trade-offs | Leverage: Config model, design.md preset specifications | Requirements: Req 10 | Success: All three presets load correctly, modes have appropriate stage/engine configurations, trade-offs documented | Instructions: Mark [-], create preset YAML files, validate against Config model, log with artifacts (config files created with mode settings), mark [x]_
 
-- [ ] 8.2. Add environment variable support
+- [x] 8.2. Add environment variable support
   - Files: `src/smart_pdf_scanner/core/config.py` (extend from task 1.6), `.env.example`
   - Add environment variable loading for API keys and sensitive config
   - Create .env.example template
@@ -404,7 +404,7 @@
   - _Requirements: Req 10 (Configuration Management), Security_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in security and configuration management | Task: Extend ConfigManager to load environment variables for API keys and sensitive settings, create .env.example template | Restrictions: Never commit actual API keys, use python-dotenv, document all env vars | Leverage: python-dotenv, ConfigManager, os.environ | Requirements: Req 10, Security | Success: Environment variables load correctly, API keys secured, .env.example documents all options | Instructions: Mark [-], add env var loading to ConfigManager, create .env.example, log with artifacts (functions: env var loading, .env.example file), mark [x]_
 
-- [ ] 8.3. Implement command-line entry point (basic)
+- [x] 8.3. Implement command-line entry point (basic)
   - Files: `src/smart_pdf_scanner/__main__.py`
   - Create basic CLI entry point for testing pipeline
   - Accept PDF path and config file as arguments
@@ -413,7 +413,7 @@
   - _Requirements: Req 1 (Pipeline Orchestration)_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in CLI applications | Task: Create basic command-line entry point to run pipeline for testing and validation | Restrictions: Use argparse, support PDF path and config file arguments, output results clearly | Leverage: Pipeline, ConfigManager, argparse, pathlib | Requirements: Req 1 | Success: CLI runs pipeline successfully, accepts arguments, outputs results, errors handled gracefully | Instructions: Mark [-], implement __main__.py with argparse, test CLI execution, log with artifacts (files: __main__.py with CLI logic), mark [x]_
 
-- [ ] 8.4. Final integration testing and bug fixes
+- [x] 8.4. Final integration testing and bug fixes
   - Files: Various (bug fixes as needed)
   - Run full integration tests with all processing modes
   - Fix any integration issues discovered
@@ -422,7 +422,7 @@
   - _Requirements: All requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Senior Python Developer with expertise in debugging and integration | Task: Perform final integration testing across all processing modes and PDF types, fix any bugs discovered | Restrictions: Must not break existing functionality, maintain test coverage, document all fixes | Leverage: Integration tests, sample PDFs, pytest, debugging tools | Requirements: All | Success: All integration tests pass, no critical bugs remain, output quality meets requirements across PDF types | Instructions: Mark [-], run integration tests, fix bugs systematically, validate fixes, log with artifacts (files modified for bug fixes, issues resolved), mark [x]_
 
-- [ ] 8.5. Performance optimization and profiling
+- [x] 8.5. Performance optimization and profiling
   - Files: Various (optimizations as needed), `tests/performance/test_benchmarks.py`
   - Profile pipeline performance with different PDF sizes
   - Optimize bottlenecks (memory usage, processing speed)
@@ -431,7 +431,7 @@
   - _Requirements: Non-functional requirement: Performance_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Performance Engineer with expertise in profiling and optimization | Task: Profile pipeline performance, identify bottlenecks, optimize to meet performance targets (1-15 sec/page depending on mode) | Restrictions: Maintain code quality, don't sacrifice accuracy for speed, document optimizations | Leverage: cProfile, memory_profiler, pytest-benchmark, optimization techniques | Requirements: Performance | Success: Performance targets met for all modes, memory usage within limits, bottlenecks eliminated, benchmarks pass | Instructions: Mark [-], profile with various PDFs, optimize critical paths, create benchmarks, log with artifacts (optimizations made, benchmark results), mark [x]_
 
-- [ ] 8.6. Code quality and linting
+- [x] 8.6. Code quality and linting
   - Files: `.ruff.toml`, `pyproject.toml` (add tool configs), all Python files
   - Set up ruff for linting and black for formatting
   - Run mypy for type checking
@@ -440,7 +440,7 @@
   - _Requirements: Non-functional requirement: Code quality_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in code quality and tooling | Task: Set up and configure code quality tools (ruff, black, mypy), fix all linting and type errors across codebase | Restrictions: Follow PEP 8, maintain consistent style, ensure type safety | Leverage: ruff, black, mypy, pre-commit hooks | Requirements: Code quality | Success: All linting passes, code formatted consistently, type checking passes, pre-commit hooks configured | Instructions: Mark [-], configure tools, run linters, fix issues, log with artifacts (config files, linting results), mark [x]_
 
-- [ ] 8.7. Final documentation review and completion
+- [x] 8.7. Final documentation review and completion
   - Files: `README.md`, `docs/`, all docstrings
   - Review all documentation for completeness and accuracy
   - Add architecture diagrams and examples

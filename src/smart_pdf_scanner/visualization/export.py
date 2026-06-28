@@ -12,7 +12,8 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from PIL import Image as PILImage, PngImagePlugin
+from PIL import Image as PILImage
+from PIL import PngImagePlugin
 
 from smart_pdf_scanner.models.document import Document
 from smart_pdf_scanner.models.page import Page

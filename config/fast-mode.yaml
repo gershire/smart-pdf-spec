@@ -1,0 +1,48 @@
+# Smart PDF Scanner — Fast Mode Configuration
+# Optimised for speed: skips LLM stages, uses heuristic layout engine,
+# runs pages in parallel. Trade-off: lower accuracy on complex layouts.
+
+processing:
+  mode: fast
+  max_file_size_mb: 150
+  parallel_pages: true
+  max_workers: 4
+
+stages:
+  enabled:
+    - pdf_parser
+    - layout_analyzer
+    - ocr_processor
+    - table_processor
+    - markdown_generator
+
+ocr:
+  engine: tesseract
+  languages:
+    - eng
+  confidence_threshold: 0.6
+
+layout:
+  engine: heuristic
+  model: ""
+  confidence_threshold: 0.6
+
+llm:
+  provider: null
+  model: gpt-4-turbo
+  max_tokens: 2048
+  temperature: 0.1
+
+output:
+  format: markdown
+  include_page_numbers: false
+
+table:
+  export_csv: false
+
+cache:
+  enabled: true
+
+logging:
+  level: INFO
+  format: text

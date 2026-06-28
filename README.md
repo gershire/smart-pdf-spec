@@ -1,164 +1,242 @@
 # Smart PDF Scanner
 
-Intelligent PDF to Markdown converter with structural fidelity.
+Intelligent PDF-to-Markdown converter with structural fidelity.
 
 ## Overview
 
-Smart PDF Scanner converts PDF documents into structured, machine-readable Markdown format while preserving semantic structure, visual organization, and element relationships. The system handles complex layouts, multi-column documents, scanned images, and hybrid PDFs with a focus on structural and semantic fidelity.
+Smart PDF Scanner converts PDF documents into structured, machine-readable Markdown while preserving semantic structure, visual organization, and element relationships. It handles complex layouts, multi-column documents, scanned images, and hybrid PDFs through a pluggable processing pipeline.
 
 ## Features
 
-- **Structural Fidelity**: Preserves document hierarchy, reading order, and relationships
-- **Complex Layout Handling**: Multi-column layouts, tables, images, footnotes
-- **Intelligent OCR**: Tesseract and EasyOCR with automatic fallback
-- **Table Processing**: Converts tables to Markdown with structure preservation
-- **Image Processing**: Classification, OCR, and AI-generated descriptions
-- **Multiple Deployment Modes**: Desktop app, CLI tool, Cloud API
-- **Configurable Processing**: Fast, balanced, and high-fidelity modes
+- **Structural fidelity** — headings, reading order, and section hierarchy preserved
+- **Complex layout handling** — multi-column, tables, images, captions, footnotes
+- **Intelligent OCR** — Tesseract and EasyOCR with automatic confidence-based fallback
+- **Table extraction** — Markdown output with optional CSV export via pdfplumber
+- **Image processing** — visual classification, embedded-text OCR, LLM-generated descriptions
+- **Semantic enhancement** — LLM-powered summary, keyword, and entity extraction
+- **Three processing modes** — Fast, Balanced, High-Fidelity (see below)
+- **Fully configurable** — YAML files, environment variables, or Python API
 
 ## Installation
 
-### Using Poetry (Recommended)
-
 ```bash
-# Install Poetry if you haven't already
-curl -sSL https://install.python-poetry.org | python3 -
+# Clone and install
+git clone https://github.com/gershire/smart-pdf-spec.git
+cd smart-pdf-spec
+pip install -e ".[dev]"          # or: poetry install --with dev
 
-# Clone the repository
-git clone https://github.com/yourusername/smart-pdf-scanner.git
-cd smart-pdf-scanner
-
-# Install dependencies
-poetry install
-
-# For desktop app
-poetry install --with desktop
-
-# For CLI tool
-poetry install --with cli
-
-# For API server
-poetry install --with api
-
-# For development
-poetry install --with dev
-```
-
-### Using pip
-
-```bash
-pip install smart-pdf-scanner
+# Tesseract OCR (required for scanned PDFs)
+# macOS:   brew install tesseract
+# Ubuntu:  sudo apt install tesseract-ocr
 ```
 
 ## Quick Start
 
+### Command line
+
+```bash
+# Process with default (balanced) settings
+python -m smart_pdf_scanner document.pdf
+
+# Choose a mode
+python -m smart_pdf_scanner document.pdf --mode fast
+python -m smart_pdf_scanner document.pdf --mode high_fidelity
+
+# Specify output path and config file
+python -m smart_pdf_scanner document.pdf -o output.md -c config/fast-mode.yaml
+
+# Options
+python -m smart_pdf_scanner --help
+```
+
 ### Python API
 
 ```python
-from smart_pdf_scanner import Pipeline, Config
+from pathlib import Path
+from smart_pdf_scanner.core.config import ConfigManager
+from smart_pdf_scanner.core.pipeline import PipelineBuilder
+from smart_pdf_scanner.models.config import ProcessingMode
 
-# Create pipeline with default config
-pipeline = Pipeline.from_config(Config())
+# Quick run with a preset
+config = ConfigManager.get_preset(ProcessingMode.FAST)
+pipeline = PipelineBuilder(config).build()
+result = pipeline.process(Path("document.pdf"), output_path=Path("output.md"))
 
-# Process a PDF
-result = pipeline.process("document.pdf")
+print(result.success)                          # True
+print(result.statistics.pages_processed)       # e.g. 12
+print(result.markdown_path)                    # Path("output.md")
 
-# Access the markdown output
-print(result.markdown_path)
+# Load from a YAML config file
+config = ConfigManager.load("config/high-fidelity-mode.yaml")
+result = PipelineBuilder(config).build().process(Path("report.pdf"))
 ```
-
-### Command Line
-
-```bash
-# Process a single PDF
-smart-pdf process input.pdf --output output/
-
-# Batch process multiple PDFs
-smart-pdf batch pdfs/*.pdf --mode fast
-
-# Visualize layout detection
-smart-pdf visualize input.pdf --page 1 --output viz.png
-```
-
-## Configuration
-
-Configuration can be provided via:
-1. YAML file (`config/default.yaml`)
-2. Environment variables
-3. Command-line arguments
-
-See `config/default.yaml` for all available options.
 
 ## Processing Modes
 
-- **Fast**: Basic text extraction and layout analysis (1-2 sec/page)
-- **Balanced**: Full processing with OCR and structure recognition (3-5 sec/page)
-- **High-Fidelity**: Maximum accuracy with LLM enhancement (10-15 sec/page)
+| Mode | Speed | Stages | LLM | Use case |
+|------|-------|--------|-----|----------|
+| **fast** | ~1–2 s/page | pdf_parser, layout_analyzer, ocr_processor, table_processor, markdown_generator | No | Batch conversion, CI pipelines |
+| **balanced** | ~3–5 s/page | All stages | No | General-purpose conversion |
+| **high_fidelity** | ~10–15 s/page | All stages | Yes (OpenAI / Anthropic) | Research, archival, maximum accuracy |
 
-## Requirements
+Config files for each mode live in `config/`.
 
-- Python 3.10+
-- Tesseract OCR (for OCR processing)
-- 16GB RAM recommended
-- GPU optional (improves performance)
+## Configuration
 
-## Documentation
+Configuration sources are merged in this order (later overrides earlier):
 
-- [User Guide](docs/user-guide/)
-- [Developer Guide](docs/developer-guide/)
-- [API Reference](docs/api-reference/)
+```
+defaults → YAML file → environment variables → explicit overrides
+```
+
+### YAML file
+
+```bash
+# Edit a preset or copy the default
+cp config/balanced-mode.yaml config/my-config.yaml
+python -m smart_pdf_scanner doc.pdf -c config/my-config.yaml
+```
+
+Key YAML sections:
+
+```yaml
+processing:
+  mode: balanced          # fast | balanced | high_fidelity
+  parallel_pages: false
+
+ocr:
+  engine: tesseract       # tesseract | easyocr
+  confidence_threshold: 0.7
+
+layout:
+  engine: heuristic       # heuristic | layoutparser
+  confidence_threshold: 0.7
+
+llm:
+  provider: openai        # openai | anthropic | null
+  model: gpt-4-turbo
+```
+
+See `config/default.yaml` for all options with documentation.
+
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in values:
+
+```bash
+cp .env.example .env
+# Set API keys for LLM/semantic enhancement
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Override any Config field with SMART_PDF_ prefix
+SMART_PDF_PROCESSING_MODE=fast
+SMART_PDF_LOG_LEVEL=DEBUG
+```
 
 ## Project Structure
 
 ```
 smart-pdf-scanner/
-├── src/smart_pdf_scanner/    # Main package
-│   ├── core/                 # Core pipeline
-│   ├── stages/               # Processing stages
-│   ├── engines/              # Pluggable engines (OCR, layout, LLM)
-│   ├── models/               # Data models
-│   ├── utils/                # Utilities
-│   ├── visualization/        # Visualization tools
-│   ├── desktop/              # Desktop application
-│   ├── cli/                  # CLI application
-│   └── api/                  # Cloud API
-├── tests/                    # Test suite
-├── docs/                     # Documentation
-├── config/                   # Configuration files
-└── pyproject.toml            # Project metadata
+├── src/smart_pdf_scanner/
+│   ├── __main__.py          # python -m smart_pdf_scanner entry point
+│   ├── core/
+│   │   ├── pipeline.py      # Pipeline, PipelineBuilder
+│   │   └── config.py        # ConfigManager (YAML + env loading)
+│   ├── stages/              # Processing stages (one per concern)
+│   │   ├── pdf_parser.py
+│   │   ├── layout_analyzer.py
+│   │   ├── ocr_processor.py
+│   │   ├── structure_recognizer.py
+│   │   ├── table_processor.py
+│   │   ├── image_processor.py
+│   │   ├── semantic_enhancer.py
+│   │   └── markdown_generator.py
+│   ├── engines/             # Pluggable OCR / layout / LLM engines
+│   │   ├── ocr/             # Tesseract, EasyOCR
+│   │   ├── layout/          # Heuristic, LayoutParser
+│   │   └── llm/             # OpenAI, Anthropic
+│   ├── models/              # Pydantic data models
+│   ├── utils/               # Bbox, text, image utilities
+│   └── visualization/       # Layout / element colour rendering
+├── config/                  # YAML configuration presets
+│   ├── default.yaml
+│   ├── fast-mode.yaml
+│   ├── balanced-mode.yaml
+│   └── high-fidelity-mode.yaml
+├── tests/
+│   ├── unit/                # Stage, engine, model, utility unit tests
+│   ├── integration/         # End-to-end pipeline tests
+│   └── performance/         # Throughput benchmarks
+└── pyproject.toml
 ```
+
+## Extending the Pipeline
+
+### Add a custom stage
+
+```python
+from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning
+from smart_pdf_scanner.models.config import Config
+from smart_pdf_scanner.models.document import Document
+
+class MyStage(ProcessingStage):
+    @property
+    def name(self) -> str:
+        return "my_stage"
+
+    def validate(self, document: Document, config: Config) -> list[ValidationWarning]:
+        return []  # add pre-condition checks here
+
+    def process(self, document: Document, config: Config) -> Document:
+        for page in document.pages:
+            for element in page.elements:
+                pass  # transform elements here
+        return document
+```
+
+Register it in `config.enabled_stages` and pass it to `Pipeline(stages=[..., MyStage()])`.
+
+### Add a custom OCR engine
+
+Subclass `smart_pdf_scanner.engines.ocr.base.OCREngine`, implement `extract_text()`, and pass an instance to `OCRProcessor(primary_engine=MyEngine())`.
 
 ## Development
 
 ```bash
-# Install development dependencies
+# Install dev dependencies
 poetry install --with dev
 
-# Run tests
-poetry run pytest
+# Run tests (fast — excludes slow performance benchmarks)
+pytest -m "not slow"
 
 # Run linting
-poetry run ruff check .
-
-# Format code
-poetry run black .
+ruff check src/
 
 # Type checking
-poetry run mypy src/
+mypy src/smart_pdf_scanner/
+
+# Format
+black src/ tests/
 ```
+
+## Requirements
+
+- Python 3.10+
+- `PyMuPDF` (PDF parsing)
+- `Pillow` (image handling)
+- `pytesseract` + Tesseract binary (OCR)
+- `pdfplumber` (table extraction)
+- `openai` or `anthropic` SDK (optional, high-fidelity mode only)
 
 ## License
 
-[Your License Here]
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+MIT
 
 ## Acknowledgments
 
-Built with:
-- [PyMuPDF](https://github.com/pymupdf/PyMuPDF) - PDF processing
-- [Tesseract](https://github.com/tesseract-ocr/tesseract) - OCR
-- [LayoutParser](https://github.com/Layout-Parser/layout-parser) - Layout analysis
-- [Pydantic](https://github.com/pydantic/pydantic) - Data validation
+- [PyMuPDF](https://github.com/pymupdf/PyMuPDF) — PDF parsing
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) — OCR engine
+- [LayoutParser](https://github.com/Layout-Parser/layout-parser) — layout detection
+- [pdfplumber](https://github.com/jsvine/pdfplumber) — table extraction
+- [Pydantic](https://github.com/pydantic/pydantic) — data validation

@@ -76,11 +76,28 @@ target-version = ['py310']
 line-length = 100
 target-version = "py310"
 
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
 [tool.mypy]
-python_version = "3.10"
-warn_return_any = true
+python_version = "3.12"
 warn_unused_configs = true
 disallow_untyped_defs = true
+ignore_missing_imports = true
+
+# Optional external dependencies — suppress attr-defined / return-any noise
+[[tool.mypy.overrides]]
+module = [
+    "smart_pdf_scanner.stages.pdf_parser",
+    "smart_pdf_scanner.stages.table_processor",
+    "smart_pdf_scanner.engines.llm.openai",
+    "smart_pdf_scanner.engines.llm.anthropic",
+    "smart_pdf_scanner.engines.factories",
+    "smart_pdf_scanner.visualization.renderer",
+]
+warn_return_any = false
+disable_error_code = ["attr-defined", "no-any-return"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

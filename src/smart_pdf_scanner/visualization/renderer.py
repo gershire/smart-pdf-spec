@@ -14,9 +14,10 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from PIL import Image as PILImage, ImageDraw
+from PIL import Image as PILImage
+from PIL import ImageDraw
 
-from smart_pdf_scanner.models.elements import BoundingBox, Element
+from smart_pdf_scanner.models.elements import BoundingBox
 from smart_pdf_scanner.models.page import Page
 from smart_pdf_scanner.visualization.colors import (
     ColorRGBA,
@@ -211,7 +212,7 @@ class PageRenderer:
             scale = self._dpi / _POINTS_PER_INCH
             mat = fitz.Matrix(scale, scale)
             pix = fitz_page.get_pixmap(matrix=mat, alpha=False)
-            return PILImage.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            return PILImage.frombytes("RGB", (pix.width, pix.height), pix.samples)  # type: ignore[arg-type]
         finally:
             doc.close()
 
