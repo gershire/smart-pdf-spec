@@ -146,11 +146,9 @@ class TableProcessor(ProcessingStage):
                 bbox=bbox,
                 page_number=page.page_number,
                 rows=rows,
+                markdown=markdown,
+                csv_path=csv_path,
             )
-            # Attach extra attributes that consumers may use
-            table_el.markdown = markdown  # type: ignore[attr-defined]
-            if csv_path:
-                table_el.csv_path = csv_path  # type: ignore[attr-defined]
             page.add_element(table_el)
             logger.debug(
                 "Page %d: table %d (%d×%d) extracted",

@@ -320,7 +320,7 @@
 
 ## Phase 7: Testing & Documentation
 
-- [ ] 7.1. Create unit tests for data models
+- [x] 7.1. Create unit tests for data models
   - Files: `tests/unit/test_models/test_document.py`, `tests/unit/test_models/test_elements.py`, `tests/unit/test_models/test_config.py`
   - Test model validation, serialization, helper methods
   - Test configuration loading and hierarchy
@@ -335,7 +335,7 @@
   - _Requirements: Utility-related requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing utility functions and edge cases | Task: Create comprehensive unit tests for all utility modules covering bbox operations, image processing, text utilities, and caching | Restrictions: Test edge cases and error conditions, ensure numerical accuracy for bbox, verify cache behavior | Leverage: pytest, utility modules, sample test data | Requirements: Utility requirements | Success: All utilities tested thoroughly, edge cases covered, numerical operations accurate, cache behavior verified | Instructions: Mark [-], write unit tests for utilities, test edge cases, log with artifacts (test files and functions for each utility module), mark [x]_
 
-- [ ] 7.3. Create unit tests for engines
+- [x] 7.3. Create unit tests for engines
   - Files: `tests/unit/test_engines/test_ocr_engines.py`, `tests/unit/test_engines/test_layout_engines.py`, `tests/unit/test_engines/test_llm_providers.py`
   - Test engine implementations with mocked dependencies
   - Test fallback mechanisms
@@ -343,7 +343,7 @@
   - _Requirements: Engine-related requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing external integrations and mocking | Task: Create unit tests for all engine implementations with mocked external dependencies (OCR, layout, LLM) | Restrictions: Mock external APIs and libraries, test interface compliance, verify fallback behavior | Leverage: pytest, pytest-mock, engine implementations | Requirements: Engine requirements | Success: All engines tested with mocked dependencies, interface contracts verified, fallback mechanisms work, API errors handled | Instructions: Mark [-], write unit tests with mocks, test fallback logic, log with artifacts (test files for each engine type), mark [x]_
 
-- [ ] 7.4. Create unit tests for processing stages
+- [x] 7.4. Create unit tests for processing stages
   - Files: `tests/unit/test_stages/test_pdf_parser.py`, `tests/unit/test_stages/test_layout_analyzer.py`, etc.
   - Test each stage independently with mock engines
   - Test stage validation and error handling
@@ -351,7 +351,7 @@
   - _Requirements: Stage-related requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in testing pipeline components and isolation | Task: Create unit tests for all processing stages with mocked engines and dependencies | Restrictions: Test stages in isolation, mock all engines, verify ProcessingStage interface compliance | Leverage: pytest, pytest-mock, stage implementations, mock engines | Requirements: Stage requirements | Success: All stages tested independently, interface compliance verified, error handling works, validation catches issues | Instructions: Mark [-], write unit tests for each stage, mock dependencies, log with artifacts (test files for each stage), mark [x]_
 
-- [ ] 7.5. Create integration tests for pipeline
+- [x] 7.5. Create integration tests for pipeline
   - Files: `tests/integration/test_end_to_end.py`, `tests/integration/test_pipeline_stages.py`
   - Test full pipeline with sample PDFs
   - Test stage interactions and data flow
@@ -360,7 +360,7 @@
   - _Requirements: All requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in integration testing and end-to-end workflows | Task: Create integration tests for full pipeline processing with real sample PDFs covering all processing modes | Restrictions: Use real engines (not mocks), test with diverse PDF types, verify output quality | Leverage: pytest, Pipeline, sample PDFs (simple, multi-column, scanned, tables), ProcessingResult | Requirements: All | Success: Pipeline processes all PDF types correctly, processing modes work as expected, output quality verified, stage interactions smooth | Instructions: Mark [-], create integration tests with sample PDFs, test all modes, log with artifacts (test files, sample PDFs used), mark [x]_
 
-- [ ] 7.6. Create test fixtures and sample PDFs
+- [x] 7.6. Create test fixtures and sample PDFs
   - Files: `tests/fixtures/pdfs/`, `tests/fixtures/expected/`, `tests/conftest.py`
   - Collect or create sample PDFs (simple, multi-column, scanned, tables, mixed)
   - Create expected Markdown outputs for validation
@@ -369,7 +369,7 @@
   - _Requirements: Testing requirements_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Engineer with expertise in test data management and fixtures | Task: Create comprehensive test fixtures including sample PDFs and expected outputs for validation | Restrictions: Cover diverse PDF types, create realistic test cases, ensure expected outputs are accurate | Leverage: pytest fixtures, sample PDF generation tools | Requirements: Testing | Success: Diverse PDF samples available, expected outputs accurate, pytest fixtures reusable across tests | Instructions: Mark [-], collect/create sample PDFs, generate expected outputs, set up fixtures, log with artifacts (fixture files, sample PDFs, expected outputs), mark [x]_
 
-- [ ] 7.7. Add docstrings and type hints
+- [x] 7.7. Add docstrings and type hints
   - Files: All Python files in `src/smart_pdf_scanner/`
   - Add Google-style docstrings to all public functions and classes
   - Ensure complete type hints on all function signatures
@@ -377,7 +377,7 @@
   - _Requirements: Non-functional requirement: Usability_
   - _Prompt: Implement the task for spec core-pdf-processing, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Developer with expertise in documentation and type systems | Task: Add comprehensive Google-style docstrings and type hints to all public APIs across the codebase | Restrictions: Follow Google docstring format, add type hints to all signatures, document parameters and return values | Leverage: Python type hints, typing module, docstring examples | Requirements: Usability | Success: All public APIs documented, type hints complete, docstrings follow Google style, examples provided where helpful | Instructions: Mark [-], add docstrings and type hints systematically, run mypy for validation, log with artifacts (files modified, documentation coverage), mark [x]_
 
-- [ ] 7.8. Create README and user documentation
+- [x] 7.8. Create README and user documentation
   - Files: `README.md`, `docs/getting-started.md`, `docs/user-guide/`
   - Write project README with installation and quick start
   - Create user guide for pipeline usage

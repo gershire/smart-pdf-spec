@@ -173,7 +173,7 @@ class MarkdownGenerator(ProcessingStage):
         col_count = max(len(r.cells) for r in element.rows)
         for i, row in enumerate(element.rows):
             padded = row.cells + [""] * (col_count - len(row.cells))
-            lines.append("| " + " | ".join(padded) + " |")
+            lines.append("| " + " | ".join(c.replace("|", "\\|") for c in padded) + " |")
             if i == 0:
                 lines.append("| " + " | ".join(["---"] * col_count) + " |")
         return "\n".join(lines)
@@ -192,7 +192,7 @@ class MarkdownGenerator(ProcessingStage):
         """
         description: str = getattr(element, "description", "") or ""
         caption: str = getattr(element, "caption", "") or ""
-        file_path = getattr(element, "file_path", None)
+        file_path = getattr(element, "image_path", None)
 
         alt = description or caption or "image"
         if file_path:
