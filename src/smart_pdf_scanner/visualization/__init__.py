@@ -1,9 +1,9 @@
 """Visualization utilities for the PDF processing pipeline."""
 
 from smart_pdf_scanner.visualization.colors import (
+    DEFAULT_COLOR_SCHEME,
     ColorRGBA,
     ColorScheme,
-    DEFAULT_COLOR_SCHEME,
     get_color_scheme,
     get_element_color,
 )

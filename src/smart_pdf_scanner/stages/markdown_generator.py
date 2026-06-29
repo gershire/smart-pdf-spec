@@ -20,9 +20,7 @@ from smart_pdf_scanner.models.elements import (
     Heading,
     Image,
     Table,
-    TextBlock,
 )
-from smart_pdf_scanner.models.page import Page
 from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning
 
 __all__ = ["MarkdownGenerator"]

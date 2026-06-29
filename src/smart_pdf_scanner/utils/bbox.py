@@ -25,7 +25,7 @@ Recognition — reading-order determination and column detection).
 
 from __future__ import annotations
 
-from typing import List, Optional, Protocol, Sequence, Tuple, TypeVar, Union, runtime_checkable
+from typing import Any, List, Optional, Protocol, Sequence, Tuple, TypeVar, Union, runtime_checkable
 
 __all__ = [
     "BBoxLike",
@@ -384,10 +384,11 @@ def reading_order_key(
         A ``(column, banded_top, left)`` tuple suitable for :func:`sorted`.
     """
     x0, y0, _, _ = _coords(box)
+    banded_top: float
     if row_quantum > 0.0:
-        banded_top = round(y0 / row_quantum)
+        banded_top = float(round(y0 / row_quantum))
     else:
-        banded_top = y0
+        banded_top = float(y0)
     return (float(column), float(banded_top), x0)
 
 
@@ -492,7 +493,7 @@ def assign_to_column(box: BBoxInput, columns: Sequence[Coords]) -> int:
 def sort_by_reading_order(
     items: Sequence[T],
     *,
-    key=None,
+    key: Any = None,
     detect_cols: bool = True,
     row_quantum: Optional[float] = None,
     min_gap_ratio: float = 0.05,

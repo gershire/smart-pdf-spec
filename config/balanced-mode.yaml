@@ -1,9 +1,9 @@
-# Smart PDF Scanner — Default Configuration (balanced mode)
-# This file documents every available setting with its default value.
-# Copy and modify to create custom configurations.
+# Smart PDF Scanner — Balanced Mode Configuration
+# Good accuracy with reasonable speed. Runs the full stage pipeline
+# but without LLM enhancement.
 
 processing:
-  mode: balanced           # fast | balanced | high_fidelity
+  mode: balanced
   max_file_size_mb: 150
   parallel_pages: false
   max_workers: 4
@@ -20,18 +20,18 @@ stages:
     - markdown_generator
 
 ocr:
-  engine: tesseract        # tesseract | easyocr
+  engine: tesseract
   languages:
     - eng
   confidence_threshold: 0.7
 
 layout:
-  engine: layoutparser     # heuristic | layoutparser
+  engine: layoutparser
   model: "lp://PubLayNet/faster_rcnn_R_50_FPN_3x/config"
   confidence_threshold: 0.7
 
 llm:
-  provider: openai         # openai | anthropic | null (to disable)
+  provider: null
   model: gpt-4-turbo
   max_tokens: 4096
   temperature: 0.1
@@ -47,5 +47,5 @@ cache:
   enabled: true
 
 logging:
-  level: INFO              # DEBUG | INFO | WARNING | ERROR
-  format: json             # json | text
+  level: INFO
+  format: json

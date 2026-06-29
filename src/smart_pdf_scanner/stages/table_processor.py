@@ -12,7 +12,6 @@ when ``config.export_tables_csv`` is ``True``.
 from __future__ import annotations
 
 import csv
-import io
 import logging
 import uuid
 from pathlib import Path
@@ -163,7 +162,7 @@ class TableProcessor(ProcessingStage):
         rows: List[TableRow] = []
         for i, raw_row in enumerate(raw):
             cells = [str(c or "") for c in raw_row]
-            rows.append(TableRow(cells=cells, is_header=(i == 0)))
+            rows.append(TableRow(cells=cells))
         return rows
 
     @staticmethod

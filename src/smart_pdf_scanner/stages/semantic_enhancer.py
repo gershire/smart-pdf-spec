@@ -21,7 +21,7 @@ from typing import List, Optional
 from smart_pdf_scanner.engines.llm.base import LLMProvider
 from smart_pdf_scanner.models.config import Config, LLMConfig
 from smart_pdf_scanner.models.document import Document
-from smart_pdf_scanner.models.elements import ElementType, Heading, Image
+from smart_pdf_scanner.models.elements import ElementType, Image
 from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning
 
 __all__ = ["SemanticEnhancer"]

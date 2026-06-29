@@ -12,21 +12,17 @@ and the bbox utilities from Phase 2.
 from __future__ import annotations
 
 import logging
-import uuid
 from typing import List
 
 from smart_pdf_scanner.engines.layout.base import LayoutEngine
 from smart_pdf_scanner.models.config import LayoutConfig
 from smart_pdf_scanner.models.elements import (
-    BoundingBox,
     Element,
     ElementType,
     FontInfo,
     Heading,
-    TextBlock,
 )
 from smart_pdf_scanner.models.page import Page
-from smart_pdf_scanner.utils import bbox as bbox_utils
 from smart_pdf_scanner.utils.text_utils import looks_like_heading
 
 __all__ = ["HeuristicEngine"]

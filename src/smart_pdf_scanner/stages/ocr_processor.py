@@ -113,6 +113,7 @@ class OCRProcessor(ProcessingStage):
         page.ocr_confidence = result.confidence
         if result.text:
             import uuid
+
             from smart_pdf_scanner.models.elements import BoundingBox
             page.add_element(
                 TextBlock(
@@ -126,7 +127,7 @@ class OCRProcessor(ProcessingStage):
                     ),
                     page_number=page.page_number,
                     text=result.text,
-                    ocr_confidence=result.confidence,
+                    confidence=result.confidence,
                 )
             )
             logger.debug(

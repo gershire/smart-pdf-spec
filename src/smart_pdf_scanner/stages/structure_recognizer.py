@@ -10,18 +10,15 @@ corresponding headings (Requirement 5: Structure Recognition).
 from __future__ import annotations
 
 import logging
-import uuid
-from typing import List, Optional
+from typing import List
 
 from smart_pdf_scanner.models.config import Config
 from smart_pdf_scanner.models.document import Document
 from smart_pdf_scanner.models.elements import (
     AnyElement,
-    Element,
     ElementType,
     FontInfo,
     Heading,
-    TextBlock,
 )
 from smart_pdf_scanner.models.structure import DocumentStructure, TableOfContents, TOCEntry
 from smart_pdf_scanner.stages.base import ProcessingStage, ValidationWarning

@@ -249,9 +249,9 @@ class ImageProcessor(ProcessingStage):
             if cb is None:
                 return float("inf")
             # vertical gap below the image
-            return abs(cb.y0 - ib.y1)
+            return abs(cb.y0 - ib.y1)  # type: ignore[attr-defined]
         closest = min(captions, key=dist)
         # Only associate if within ~50 pt
         if dist(closest) < 50:
-            return closest
+            return closest  # type: ignore[return-value]
         return None
